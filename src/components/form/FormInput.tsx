@@ -23,11 +23,9 @@ export default function FormInput({
     formState: { errors },
   } = useFormContext();
 
-  console.log(errors);
-
   return (
     <div>
-      <label htmlFor={name} className='font-medium'>
+      <label htmlFor={name} className='font-medium text-sm'>
         {label}
       </label>
       <Input {...register(name)} required={required} type={type} />

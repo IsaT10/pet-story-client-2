@@ -25,7 +25,6 @@ export default function RegisterPage() {
   const { handleSubmit, reset } = methods;
   console.log(imageFile);
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
     const formData = new FormData();
     const postData = {
       ...data,

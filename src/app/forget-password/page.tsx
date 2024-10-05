@@ -9,7 +9,7 @@ import Loading from '@/components/ui/loading';
 import FormWrapper from '@/components/form/FormWrapper';
 import FormInput from '@/components/form/FormInput';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'; // Importing necessary dialog components
+import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
 import { useEffect, useState } from 'react';
 
 const ForgetPassword = () => {

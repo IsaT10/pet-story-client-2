@@ -11,6 +11,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: '#6A5ACD', // Slate Blue
+        hover: '#A3B3E0 ',
         secondary: '#E6E6FA', // Lavender
         background: '#DCDCDC', // Light Taupe
         highlight: '#98FB98', // Soft Mint
