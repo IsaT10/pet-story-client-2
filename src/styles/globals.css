@@ -17,3 +17,11 @@ body {
     --radius: 0.5rem;
   }
 }
+
+.custom-html h1 {
+  font-size: 2rem; /* Equivalent to text-4xl in Tailwind */
+}
+
+.custom-html h2 {
+  font-size: 1.875rem; /* Equivalent to text-3xl */
+}
