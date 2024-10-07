@@ -6,21 +6,25 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 
 export interface IPost {
   _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  location: string;
-  city: string;
-  dateFound: string;
-  status: string;
-  isReported: boolean;
-  reportCount: number;
   category: ICategory;
-  user: IUser;
-  questions: string[];
+  isPremium: boolean;
+  upvotes: string[];
+  downvotes: string[];
+  comments: IComment[];
+  content: string;
+  thumbnail: string;
+  author: IUser;
   createdAt: string;
   updatedAt: string;
-  __v: number;
+}
+
+export interface IComment {
+  _id?: string;
+  postId?: string;
+  userId?: IUser;
+  comment: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IPost {

@@ -12,6 +12,7 @@ import React from 'react';
 type TProps = { image: string; _id: string; name: string };
 
 export default function EditProfile({ image, _id, name }: TProps) {
+  const [open, setOpen] = React.useState(false);
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const [editName, setEditName] = React.useState(name);
   const [isModified, setIsModified] = React.useState(false);
@@ -51,14 +52,14 @@ export default function EditProfile({ image, _id, name }: TProps) {
       { updateData: formData, id: _id },
       {
         onSuccess: () => {
-          // Reset the form and clear images on success
+          setOpen(false);
           setImageFile(null);
         },
       }
     );
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className='mt-6 py-1.5 text-sm'>Edit profile</Button>
       </DialogTrigger>

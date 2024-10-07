@@ -3,6 +3,10 @@
 import { useUser } from '@/context/user.provider';
 import Image from 'next/image';
 import React from 'react';
+import avatar from '@/assets/images/avatar.png';
+import { Cross, Menu } from 'lucide-react';
+import { Pencil } from './icon';
+import { CreateContentModal } from '../modules/create-model';
 
 export default function Nav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
@@ -15,15 +19,39 @@ export default function Nav() {
       <div className='w-full px-4  md:px-8 lg:px-10 flex items-center justify-between'>
         <h1 className='text-3xl font-semibold'>Pet</h1>
         {/* <img className='h-[30px] md:h-[36px]' src={logo} alt='logo' /> */}
-        <div className='flex items-center gap-4 md:hidden'></div>
+        <div className='flex items-center gap-4 md:hidden'>
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className='text-[#6D6D75] hover:text-black '
+          >
+            <Menu />
+          </button>
+        </div>
+        <ul className='hidden md:flex gap-8'>
+          <li>
+            <a href='#hero'>Home</a>
+          </li>
+          <li>
+            <a href='#about-us'>About us</a>
+          </li>
+          <li>
+            <a href='#featured'>Projects</a>
+          </li>
+          <li>
+            <a href='#services'>Services</a>
+          </li>
+        </ul>
 
-        <Image
-          src={user?.image}
-          width={40}
-          height={40}
-          alt='profile-image'
-          className='rounded-full'
-        />
+        <div className='flex items-center gap-6'>
+          <CreateContentModal />
+          <Image
+            src={user?.image || avatar}
+            width={40}
+            height={40}
+            alt='profile-image'
+            className='rounded-full'
+          />
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -38,7 +66,7 @@ export default function Nav() {
             onClick={() => setIsMobileMenuOpen(false)}
             className='text-[#6D6D75] hover:text-black '
           >
-            {/* <Cross size={24} /> */}
+            <Cross size={24} />
           </button>
         </div>
         <ul className='flex flex-col items-center space-y-6 mt-8'>
