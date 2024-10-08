@@ -4,10 +4,11 @@ import {
   updateComment,
 } from '@/services/comment';
 import { IComment } from '@/types';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useCreateComment = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['CREATE_COMMENT'],
     mutationFn: async ({
@@ -19,6 +20,8 @@ export const useCreateComment = () => {
     }) => await createComment(postId, commentData),
     onSuccess: () => {
       toast.success('Comment submitted successfully!');
+
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);

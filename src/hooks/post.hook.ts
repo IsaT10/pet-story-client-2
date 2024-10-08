@@ -3,11 +3,20 @@ import {
   createPost,
   deletePost,
   downvotePost,
+  getAllPost,
   getPostByUser,
   updatePost,
   upvotePost,
 } from '../services/post';
 import { toast } from 'sonner';
+import { TQueryParam } from '@/types';
+
+export const useGetAllPosts = (query: TQueryParam[]) => {
+  return useQuery({
+    queryKey: ['GET_ALL_POSTS', query],
+    queryFn: () => getAllPost(query),
+  });
+};
 
 export const useGetPostByUser = (userId: string) => {
   return useQuery({
@@ -19,7 +28,7 @@ export const useGetPostByUser = (userId: string) => {
 
 export const useDeletePost = (postId: string) => {
   return useMutation({
-    mutationKey: ['POSTS', postId],
+    mutationKey: ['DELETE_POSTS', postId],
     mutationFn: () => deletePost(postId),
     onSuccess: () => {
       toast.success('Post deleted successfully.');

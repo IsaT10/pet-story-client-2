@@ -42,6 +42,11 @@ export interface IUser {
   following?: IUser[];
 }
 
+export type TQueryParam = {
+  name: string;
+  value: boolean | React.Key;
+};
+
 export interface ICategory {
   _id: string;
   name: string;

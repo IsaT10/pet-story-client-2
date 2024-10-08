@@ -29,7 +29,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreVertical } from 'lucide-react';
+import { MoreHorizontal, MoreVertical } from 'lucide-react';
 import { Button } from '../ui/button';
 import { EditContentModal } from './edit-modal';
 import SingleComment from './comment';
@@ -142,7 +142,7 @@ export default function Post({ post, refetch }: TProps) {
       },
       {
         onSuccess: () => {
-          refetch();
+          // refetch();
           setCommentText('');
         },
       }
@@ -151,7 +151,7 @@ export default function Post({ post, refetch }: TProps) {
   const previewContent =
     content.length > 300 ? content.substring(0, 500) + '...' : content;
   return (
-    <div className='mb-20 pr-10'>
+    <div className='mb-20 '>
       <div className='flex justify-between items-start'>
         <div className='flex items-start gap-2 mb-6'>
           <Image
@@ -169,51 +169,57 @@ export default function Post({ post, refetch }: TProps) {
           </div>
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className='bg--100 p-3 hover:bg-stone-100'>
-              <MoreVertical className='h-4 w-4' />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className='bg-white w-[100px] border shadow-sm rounded-lg p-1'
-            align='center'
-          >
-            <EditContentModal post={post} refetch={refetch} />
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className='px-4 py-1.5 text-sm rounded-md w-full text-left hover:bg-stone-100 hover:outine-none'>
-                  Delete post
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className='px-6 pt-6 h-[240px]'>
-                <AlertDialogHeader className=''>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>
-                    <Button variant='outline' className='py-[7px]'>
-                      Cancel
-                    </Button>
-                  </AlertDialogCancel>
-                  <AlertDialogAction>
-                    <Button
-                      onClick={handleDelete}
-                      variant='default'
-                      className='py-2'
-                    >
-                      Continue
-                    </Button>
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {author._id === user?._id ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className='bg--100 p-3 rounded-full hover:bg-stone-100'>
+                <MoreHorizontal className='h-4 w-4' />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className='bg-white w-[100px] border shadow-sm rounded-lg p-1'
+              align='center'
+            >
+              <EditContentModal post={post} refetch={refetch} />
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button className='px-4 py-1.5 text-sm rounded-md w-full text-left hover:bg-stone-100 hover:outine-none'>
+                    Delete post
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className='px-6 pt-6 h-[240px]'>
+                  <AlertDialogHeader className=''>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>
+                      <Button variant='outline' className='py-[7px]'>
+                        Cancel
+                      </Button>
+                    </AlertDialogCancel>
+                    <AlertDialogAction>
+                      <Button
+                        onClick={handleDelete}
+                        variant='default'
+                        className='py-2'
+                      >
+                        Continue
+                      </Button>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          ''
+        )}
       </div>
 
       <div

@@ -18,7 +18,7 @@ type TProps = { user: IUser; isFollowing?: boolean };
 
 export default function UserList({ user, isFollowing = false }: TProps) {
   const { name, image, _id } = user;
-  const { mutate: handleUnfollow, isSuccess, isPending } = useUnfollowUser();
+  const { mutate: handleUnfollow, isPending } = useUnfollowUser();
 
   const handleUnfollowUser = () => {
     handleUnfollow(_id);

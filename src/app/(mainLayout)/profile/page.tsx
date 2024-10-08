@@ -13,7 +13,7 @@ export default async function ProfilePage() {
         ))}
       </div> */}
 
-      <div className='w-[65%] py-10'>
+      <div className='w-[65%] py-10 pr-10'>
         <MyPosts />
       </div>
 
