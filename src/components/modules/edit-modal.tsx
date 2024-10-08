@@ -7,16 +7,18 @@ import {
 } from '@/components/ui/dialog';
 import React from 'react';
 import ContentForm from './content-form';
+import { IPost } from '@/types';
 
-export function EditContentModal({
-  category,
-  isPremium,
-  content,
-  thumbnail,
-  postId,
-}) {
+type TProps = {
+  post: IPost;
+  refetch: () => void;
+};
+
+export function EditContentModal({ post, refetch }: TProps) {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const { thumbnail, content, category, isPremium, _id } = post;
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>
         <button className='px-4 py-1.5 text-sm rounded-md w-full text-left hover:bg-stone-100 hover:outine-none'>
           Edit post
@@ -30,8 +32,10 @@ export function EditContentModal({
           category={category}
           isPremium={isPremium}
           content={content}
+          setIsOpen={setIsOpen}
           thumbnail={thumbnail}
-          postId={postId}
+          postId={_id}
+          //   refetch={refetch}
           isEdit={true}
         />
       </DialogContent>

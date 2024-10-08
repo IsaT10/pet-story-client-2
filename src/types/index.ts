@@ -6,7 +6,7 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 
 export interface IPost {
   _id: string;
-  category: ICategory;
+  category: string;
   isPremium: boolean;
   upvotes: string[];
   downvotes: string[];

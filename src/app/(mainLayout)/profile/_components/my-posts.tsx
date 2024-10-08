@@ -8,7 +8,7 @@ import { useGetPostByUser } from '@/hooks/post.hook';
 const MyPosts = () => {
   const { user } = useUser();
 
-  const { data, isLoading } = useGetPostByUser(user?._id!);
+  const { data, isLoading, refetch } = useGetPostByUser(user?._id!);
   if (isLoading) {
     return <div>Loading posts...</div>;
   }
@@ -16,7 +16,7 @@ const MyPosts = () => {
   return (
     <>
       {data?.data?.result?.map((item: IPost) => (
-        <Post key={item._id} post={item} />
+        <Post key={item._id} post={item} refetch={refetch} />
       ))}
     </>
   );

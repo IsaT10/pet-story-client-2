@@ -11,9 +11,10 @@ import ContentForm from './content-form';
 
 export function CreateContentModal() {
   const [isHovered, setIsHovered] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>
         <button
           onMouseEnter={() => setIsHovered(true)}
@@ -28,7 +29,7 @@ export function CreateContentModal() {
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
-        <ContentForm />
+        <ContentForm setIsOpen={setIsOpen} />
       </DialogContent>
     </Dialog>
   );

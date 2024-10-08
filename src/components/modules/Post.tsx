@@ -5,33 +5,49 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { Comment, DownArrow, Send, UpArrow } from '../ui/icon';
 import { useUser } from '@/context/user.provider';
-import { useDownvotePost, useUpvotePost } from '@/hooks/post.hook';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
+  useDeletePost,
+  useDownvotePost,
+  useUpvotePost,
+} from '@/hooks/post.hook';
 import { useCreateComment } from '@/hooks/comment.hook';
 import avatar from '@/assets/images/avatar.png';
 import { timeCompact } from '@/app/utils/timeCompact';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, MoreVertical } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 import { Button } from '../ui/button';
 import { EditContentModal } from './edit-modal';
+import SingleComment from './comment';
 
-type TProps = { post: IPost };
+type TProps = {
+  post: IPost;
+  refetch: () => void;
+};
 
-export default function Post({ post }: TProps) {
+export default function Post({ post, refetch }: TProps) {
   const {
     thumbnail,
     author,
     content,
     comments,
-    category,
+
     downvotes,
-    isPremium,
+
     createdAt,
     upvotes,
     _id,
@@ -51,6 +67,7 @@ export default function Post({ post }: TProps) {
   const { mutate: handleUpvotesPost } = useUpvotePost();
   const { mutate: handleDownvotesPost } = useDownvotePost();
   const { mutate: handleComment } = useCreateComment();
+  const { mutate: deletePost } = useDeletePost(_id);
 
   React.useEffect(() => {
     if (!isLoading && user) {
@@ -102,6 +119,14 @@ export default function Post({ post }: TProps) {
     }
   };
 
+  const handleDelete = () => {
+    deletePost(undefined, {
+      onSuccess: () => {
+        refetch();
+      },
+    });
+  };
+
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentText.trim()) return;
@@ -110,10 +135,18 @@ export default function Post({ post }: TProps) {
       comment: commentText,
     };
 
-    handleComment({
-      postId: _id,
-      commentData: newComment,
-    });
+    handleComment(
+      {
+        postId: _id,
+        commentData: newComment,
+      },
+      {
+        onSuccess: () => {
+          refetch();
+          setCommentText('');
+        },
+      }
+    );
   };
   const previewContent =
     content.length > 300 ? content.substring(0, 500) + '...' : content;
@@ -143,22 +176,42 @@ export default function Post({ post }: TProps) {
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className='bg-white border shadow-sm rounded-lg p-1'
-            align='end'
+            className='bg-white w-[100px] border shadow-sm rounded-lg p-1'
+            align='center'
           >
-            <EditContentModal
-              category={category}
-              isPremium={isPremium}
-              content={content}
-              thumbnail={thumbnail}
-              postId={_id}
-            />
-            <DropdownMenuItem
-              //   onClick={() => handleDelete(data.id)}
-              className='px-4 py-1.5 rounded-md hover:bg-stone-100'
-            >
-              Delete post
-            </DropdownMenuItem>
+            <EditContentModal post={post} refetch={refetch} />
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className='px-4 py-1.5 text-sm rounded-md w-full text-left hover:bg-stone-100 hover:outine-none'>
+                  Delete post
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className='px-6 pt-6 h-[240px]'>
+                <AlertDialogHeader className=''>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>
+                    <Button variant='outline' className='py-[7px]'>
+                      Cancel
+                    </Button>
+                  </AlertDialogCancel>
+                  <AlertDialogAction>
+                    <Button
+                      onClick={handleDelete}
+                      variant='default'
+                      className='py-2'
+                    >
+                      Continue
+                    </Button>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -178,15 +231,19 @@ export default function Post({ post }: TProps) {
         </button>
       )}
 
-      <Image
-        src={thumbnail}
-        height={100}
-        width={800}
-        alt='post-thumbnail'
-        className='my-3 max-h-[400px] rounded-lg'
-      />
+      {thumbnail ? (
+        <Image
+          src={thumbnail}
+          height={100}
+          width={800}
+          alt='post-thumbnail'
+          className='my-3 max-h-[400px] rounded-lg object-cover'
+        />
+      ) : (
+        ''
+      )}
 
-      <div className='flex gap-6 border-stone-300 items-center border-b pb-4'>
+      <div className='flex gap-6 border-stone-300 items-center border-b pt-3 pb-4'>
         <div
           className={`flex gap-2 ${
             userVote === 'upvote'
@@ -245,25 +302,11 @@ export default function Post({ post }: TProps) {
 
           <div className='space-y-3'>
             {comments.map((comment) => (
-              <div key={comment._id} className='flex items-start gap-2 mb-4 '>
-                <Image
-                  src={comment?.userId?.image || avatar}
-                  width={35}
-                  height={35}
-                  alt='comment-author-image'
-                  className='rounded-full'
-                />
-                <div className='bg-stone-100 border border-stone-200 w-max px-3 py-2 rounded-lg'>
-                  <div className='flex justify-between items-center'>
-                    <p className='font-semibold'>{comment?.userId?.name}</p>
-                    <p className='text-xs  font-semibold '>
-                      {comment?.createdAt ? timeCompact(comment.createdAt) : ''}
-                    </p>
-                  </div>
-
-                  <p className='text-[15px]'>{comment.comment}</p>
-                </div>
-              </div>
+              <SingleComment
+                key={comment._id}
+                comment={comment}
+                refetch={refetch}
+              />
             ))}
           </div>
         </>

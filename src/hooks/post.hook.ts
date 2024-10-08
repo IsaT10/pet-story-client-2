@@ -1,19 +1,32 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   createPost,
+  deletePost,
   downvotePost,
   getPostByUser,
   updatePost,
   upvotePost,
 } from '../services/post';
 import { toast } from 'sonner';
-import { IPost } from '@/types';
 
 export const useGetPostByUser = (userId: string) => {
   return useQuery({
     queryKey: ['POSTS', userId],
     queryFn: () => getPostByUser(userId),
     enabled: !!userId,
+  });
+};
+
+export const useDeletePost = (postId: string) => {
+  return useMutation({
+    mutationKey: ['POSTS', postId],
+    mutationFn: () => deletePost(postId),
+    onSuccess: () => {
+      toast.success('Post deleted successfully.');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 };
 
@@ -40,7 +53,7 @@ export const useUpdatePost = () => {
       postId: string;
     }) => await updatePost(postData, postId),
     onSuccess: () => {
-      toast.success('Post created successfully.');
+      toast.success('Post updated successfully.');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -53,7 +66,7 @@ export const useUpvotePost = () => {
     mutationKey: ['UPVOTE'],
     mutationFn: async (id: string) => await upvotePost(id),
     onSuccess: () => {
-      toast.success('Post created successfully.');
+      toast.success('Upvoted');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -66,7 +79,7 @@ export const useDownvotePost = () => {
     mutationKey: ['DOWNVOTE'],
     mutationFn: async (id: string) => await downvotePost(id),
     onSuccess: () => {
-      toast.success('Post created successfully.');
+      toast.success('Downvoted');
     },
     onError: (error) => {
       toast.error(error.message);

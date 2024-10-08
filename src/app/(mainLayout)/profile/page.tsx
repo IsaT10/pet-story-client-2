@@ -1,8 +1,6 @@
-import { getUserProfile } from '@/services/user';
 import ProfileCard from './_components/profile-card';
-import { IPost } from '@/types';
-import Post from '@/components/modules/Post';
 import MyPosts from './_components/my-posts';
+import { getUserProfile } from '@/services/user';
 
 export default async function ProfilePage() {
   const { data: userProfile } = await getUserProfile();

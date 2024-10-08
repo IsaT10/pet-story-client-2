@@ -3,7 +3,6 @@
 import { RotatingLines } from 'react-loader-spinner';
 import { Button } from '@/components/ui/button';
 import { useUnfollowUser } from '@/hooks/user.hook';
-import svg from '@/assets/Spinner@1x-1.0s-200px-200px.svg';
 import { IUser } from '@/types';
 import Image from 'next/image';
 import {

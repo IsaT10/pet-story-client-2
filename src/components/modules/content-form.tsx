@@ -1,6 +1,10 @@
 'use client';
 
-import { useCreatePost, useUpdatePost } from '@/hooks/post.hook';
+import {
+  useCreatePost,
+  useGetPostByUser,
+  useUpdatePost,
+} from '@/hooks/post.hook';
 import React from 'react';
 import QuillEditor from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -15,16 +19,33 @@ import {
 import { Button } from '../ui/button';
 import { RotatingLines } from 'react-loader-spinner';
 import { SelectLabel } from '@radix-ui/react-select';
+import { useUser } from '@/context/user.provider';
+import { IPost } from '@/types';
+
+type TProps = {
+  postId?: string;
+  category?: string;
+  isPremium?: boolean;
+  content?: string;
+  thumbnail?: string;
+  setIsOpen: (open: boolean) => void;
+  isEdit?: boolean;
+};
+
 const ContentForm = ({
   category,
   isPremium,
+  setIsOpen,
   content,
   thumbnail,
+  //   refetch,
   postId,
   isEdit = false,
-}) => {
+}: TProps) => {
+  const { user } = useUser();
+  const { refetch } = useGetPostByUser(user?._id!);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
-  const [imageFile, setImageFile] = React.useState<File | null>(null);
+  const [imageFile, setImageFile] = React.useState<File | string | null>(null);
   const [postCategory, setPostCategory] = React.useState('Story');
   const [contentType, setContentType] = React.useState('basic');
   const [value, setValue] = React.useState('');
@@ -37,9 +58,9 @@ const ContentForm = ({
   // Set default values when `isEdit` is true
   React.useEffect(() => {
     if (isEdit) {
-      setPostCategory(category);
+      setPostCategory(category!);
       setContentType(isPremium ? 'premium' : 'basic');
-      setValue(content);
+      setValue(content!);
       if (thumbnail) {
         setImageFile(thumbnail);
       }
@@ -61,15 +82,28 @@ const ContentForm = ({
     }
 
     if (isEdit) {
-      handleUpdatePost({
-        postData: formData,
-        postId: postId,
-      });
+      handleUpdatePost(
+        {
+          postData: formData,
+          postId: postId!,
+        },
+        {
+          onSuccess: () => {
+            refetch();
+            setIsOpen(false);
+          },
+        }
+      );
 
       return;
     }
 
-    handleCreatePost(formData);
+    handleCreatePost(formData, {
+      onSuccess: () => {
+        refetch();
+        setIsOpen(false);
+      },
+    });
   }
 
   const handleOnChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +161,7 @@ const ContentForm = ({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel className='font-medium text-sm py-1.5 pl-9'>
+              <SelectLabel className='font-medium text-sm py-1.5 pl-8'>
                 Select category
               </SelectLabel>
               <SelectItem value='Tips'>Tips</SelectItem>
@@ -145,7 +179,9 @@ const ContentForm = ({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Content type</SelectLabel>
+              <SelectLabel className='font-medium text-sm py-1.5 pl-8'>
+                Content type
+              </SelectLabel>
               <SelectItem value='basic'>Basic</SelectItem>
               <SelectItem value='premium'>Premium</SelectItem>
             </SelectGroup>

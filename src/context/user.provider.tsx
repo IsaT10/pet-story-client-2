@@ -6,8 +6,8 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { getUserProfile } from '../services/auth';
 import { IUser } from '@/types';
+import { getUserProfile } from '@/services/auth';
 
 type TUserProviderValue = {
   user: IUser | null;
@@ -24,6 +24,8 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const handleUser = async () => {
     const user = await getUserProfile();
+
+    console.log(user);
 
     setUser(user);
     setIsLoading(false);

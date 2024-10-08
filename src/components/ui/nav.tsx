@@ -5,12 +5,31 @@ import Image from 'next/image';
 import React from 'react';
 import avatar from '@/assets/images/avatar.png';
 import { Cross, Menu } from 'lucide-react';
-import { Pencil } from './icon';
 import { CreateContentModal } from '../modules/create-model';
+import Link from 'next/link';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from './button';
+import { logout } from '@/services/auth';
+import { usePathname, useRouter } from 'next/navigation';
+import { protectedRoutes } from '@/constant';
 
 export default function Nav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const { user } = useUser();
+  const { user, setIsLoading } = useUser();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLogout = () => {
+    logout();
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push('/');
+    }
+    setIsLoading(true);
+  };
 
   return (
     <nav
@@ -29,29 +48,60 @@ export default function Nav() {
         </div>
         <ul className='hidden md:flex gap-8'>
           <li>
-            <a href='#hero'>Home</a>
+            <Link href='/'>Home</Link>
           </li>
           <li>
-            <a href='#about-us'>About us</a>
+            <Link href='/about-us'>About us</Link>
           </li>
           <li>
-            <a href='#featured'>Projects</a>
+            <Link href='/contact-us'>Projects</Link>
           </li>
           <li>
-            <a href='#services'>Services</a>
+            <Link href='/profile'>Profile</Link>
           </li>
         </ul>
 
-        <div className='flex items-center gap-6'>
-          <CreateContentModal />
-          <Image
-            src={user?.image || avatar}
-            width={40}
-            height={40}
-            alt='profile-image'
-            className='rounded-full'
-          />
-        </div>
+        {user ? (
+          <div className='flex items-center gap-6'>
+            <CreateContentModal />
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className='cursor-pointer'>
+                <Image
+                  src={user?.image || avatar}
+                  width={40}
+                  height={40}
+                  alt='profile-image'
+                  className='rounded-full'
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className='bg-stone-100 w-[150px] space-y-1 border shadow-sm rounded-lg p-1'
+                align='end'
+              >
+                <Link
+                  href='/profile'
+                  className='block w-full text-left py-1 rounded-sm hover:bg-primary duration-200 pl-4 hover:text-white '
+                >
+                  Profile
+                </Link>
+                <button className='block w-full text-left py-1 rounded-sm hover:bg-primary duration-200 pl-4 hover:text-white '>
+                  Dashboard
+                </button>
+                <button
+                  onClick={() => handleLogout()}
+                  className='w-full text-left pl-4 text-red-600 font-medium hover:bg-red-700 hover:text-white py-1 rounded-md duration-200'
+                >
+                  Logout
+                </button>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ) : (
+          <Link href='/login'>
+            <Button className='py-2 px-6'>Login</Button>
+          </Link>
+        )}
       </div>
 
       {/* Mobile Menu */}

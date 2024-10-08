@@ -76,3 +76,15 @@ export const downvotePost = async (postId: string) => {
     throw new Error(error?.message);
   }
 };
+
+export const deletePost = async (postId: string) => {
+  try {
+    const res = await axiosInstance.delete(`/posts/${postId}`);
+
+    revalidateTag('posts');
+
+    return res?.data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
+};

@@ -1,12 +1,5 @@
-import {
-  getSingleUser,
-  getUserProfile,
-  unfollowUser,
-  updateUser,
-} from '@/services/user';
-import { IUser } from '@/types';
+import { getSingleUser, unfollowUser, updateUser } from '@/services/user';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { revalidateTag } from 'next/cache';
 import { toast } from 'sonner';
 
 type UpdateProfileParams = {
