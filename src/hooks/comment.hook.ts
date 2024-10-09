@@ -30,6 +30,7 @@ export const useCreateComment = () => {
 };
 
 export const useUpdateComment = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['UPDATE_COMMENT'],
     mutationFn: async ({
@@ -41,6 +42,7 @@ export const useUpdateComment = () => {
     }) => await updateComment(id, commentData),
     onSuccess: () => {
       toast.success('Comment updated successfully!');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -49,11 +51,13 @@ export const useUpdateComment = () => {
 };
 
 export const useDeleteComment = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['DELETE_COMMENT'],
     mutationFn: async ({ id }: { id: string }) => await deleteComment(id),
     onSuccess: () => {
       toast.success('Comment deleted successfully!');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);

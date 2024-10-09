@@ -5,22 +5,33 @@ import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserList from './user-list';
 import EditProfile from './edit-profile';
+import preimumIcon from '@/assets/images/premiumUser.png';
+import { PremiumUser } from '@/components/ui/icon';
 
 type TProps = {
   profile: IUser;
 };
 export default function ProfileCard({ profile }: TProps) {
-  const { image, followers, following, posts, name, _id } = profile;
+  const { image, followers, following, posts, name, _id, status } = profile;
 
   return (
     <div className=''>
-      <Image
-        src={image}
-        alt='profile-image'
-        width={88}
-        height={88}
-        className='rounded-full'
-      />
+      <div className='relative w-max'>
+        <Image
+          src={image}
+          alt='profile-image'
+          width={88}
+          height={88}
+          className='rounded-full'
+        />
+        {status === 'premium' ? (
+          <div className='absolute bottom-0 right-0'>
+            <PremiumUser />
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
 
       <div className='flex gap-[116px] items-center'>
         <p className='mt-4 font-medium text-xl'>{name}</p>

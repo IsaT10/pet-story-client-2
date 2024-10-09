@@ -2,7 +2,7 @@
 
 import {
   useCreatePost,
-  useGetPostByUser,
+  // useGetPostByUser,
   useUpdatePost,
 } from '@/hooks/post.hook';
 import React from 'react';
@@ -42,8 +42,8 @@ const ContentForm = ({
   postId,
   isEdit = false,
 }: TProps) => {
-  const { user } = useUser();
-  const { refetch } = useGetPostByUser(user?._id!);
+  // const { user } = useUser();
+  // const { refetch } = useGetPostByUser(user?._id!);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [imageFile, setImageFile] = React.useState<File | string | null>(null);
   const [postCategory, setPostCategory] = React.useState('Story');
@@ -89,7 +89,7 @@ const ContentForm = ({
         },
         {
           onSuccess: () => {
-            refetch();
+            // refetch();
             setIsOpen(false);
           },
         }
@@ -100,7 +100,7 @@ const ContentForm = ({
 
     handleCreatePost(formData, {
       onSuccess: () => {
-        refetch();
+        // refetch();
         setIsOpen(false);
       },
     });

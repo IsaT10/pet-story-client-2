@@ -11,10 +11,10 @@ import { IPost } from '@/types';
 
 type TProps = {
   post: IPost;
-  refetch: () => void;
+  // refetch: () => void;
 };
 
-export function EditContentModal({ post, refetch }: TProps) {
+export function EditContentModal({ post }: TProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const { thumbnail, content, category, isPremium, _id } = post;
   return (

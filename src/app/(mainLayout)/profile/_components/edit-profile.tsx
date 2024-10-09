@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { useUpdateProfile } from '@/hooks/user.hook';
 import React from 'react';
+import { RotatingLines } from 'react-loader-spinner';
 
 type TProps = { image: string; _id: string; name: string };
 
@@ -122,11 +123,26 @@ export default function EditProfile({ image, _id, name }: TProps) {
             </div>
 
             <Button
-              className='text-sm py-2.5 px-5 mt-1 mb-3'
+              className={`text-sm py-2.5  mt-1 mb-3 ${
+                isPending ? 'px-6' : 'px-5'
+              }`}
               type='submit'
               disabled={!isModified}
             >
-              Save
+              {isPending ? (
+                <RotatingLines
+                  visible
+                  height='20'
+                  width='20'
+                  strokeWidth='5'
+                  strokeColor='white'
+                  animationDuration='0.75'
+                  ariaLabel='rotating-lines-loading'
+                  className='text-white stroke-white'
+                />
+              ) : (
+                'Save'
+              )}
             </Button>
           </form>
         </div>

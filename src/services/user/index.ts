@@ -74,3 +74,16 @@ export const updateUser = async (updateData: FormData, id: string) => {
     throw new Error(error?.message);
   }
 };
+export const updateUserStatus = async (id: string) => {
+  try {
+    const res = await axiosInstance.patch(`/users/change-status/${id}`, {
+      status: 'premium',
+    });
+    revalidateTag('userProfile');
+
+    console.log(res.data);
+    return res?.data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
+};

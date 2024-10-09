@@ -5,6 +5,7 @@ import envConfig from '@/config/envConfig';
 import { axiosInstance } from '@/lib/axiosInstance';
 import { TQueryParam } from '@/types';
 import { revalidateTag } from 'next/cache';
+import { getUserProfile } from '../auth';
 
 export const getAllPost = async (query: TQueryParam[]) => {
   try {
@@ -21,7 +22,7 @@ export const getAllPost = async (query: TQueryParam[]) => {
     console.log(`${envConfig.baseApi}/posts?${queryParams}`);
 
     const res = await fetch(`${envConfig.baseApi}/posts?${queryParams}`, {
-      next: { tags: ['posts'] }, // Next.js caching options
+      next: { tags: ['allposts'] }, // Next.js caching options
     });
 
     const data = await res.json();
@@ -32,10 +33,10 @@ export const getAllPost = async (query: TQueryParam[]) => {
   }
 };
 
-export const getPostByUser = async (userId: string) => {
-  console.log(userId);
+export const getPostByUser = async () => {
+  const user = await getUserProfile();
   try {
-    const res = await fetch(`${envConfig.baseApi}/posts?author=${userId}`, {
+    const res = await fetch(`${envConfig.baseApi}/posts?author=${user?._id}`, {
       next: { tags: ['posts'] },
     });
     const data = await res.json();

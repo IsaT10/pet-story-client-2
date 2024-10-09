@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createPost,
   deletePost,
@@ -18,20 +18,22 @@ export const useGetAllPosts = (query: TQueryParam[]) => {
   });
 };
 
-export const useGetPostByUser = (userId: string) => {
-  return useQuery({
-    queryKey: ['POSTS', userId],
-    queryFn: () => getPostByUser(userId),
-    enabled: !!userId,
-  });
-};
+// export const useGetPostByUser = (userId: string) => {
+//   return useQuery({
+//     queryKey: ['POSTS', userId],
+//     queryFn: () => getPostByUser(userId),
+//     enabled: !!userId,
+//   });
+// };
 
 export const useDeletePost = (postId: string) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['DELETE_POSTS', postId],
     mutationFn: () => deletePost(postId),
     onSuccess: () => {
       toast.success('Post deleted successfully.');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -40,11 +42,13 @@ export const useDeletePost = (postId: string) => {
 };
 
 export const useCreatePost = () => {
+  const queryClient = useQueryClient();
   return useMutation<any, Error, FormData>({
     mutationKey: ['CREATE_POST'],
     mutationFn: async (postData) => await createPost(postData),
     onSuccess: () => {
       toast.success('Post created successfully.');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -52,6 +56,7 @@ export const useCreatePost = () => {
   });
 };
 export const useUpdatePost = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['UPDATE_POST'],
     mutationFn: async ({
@@ -63,6 +68,7 @@ export const useUpdatePost = () => {
     }) => await updatePost(postData, postId),
     onSuccess: () => {
       toast.success('Post updated successfully.');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -71,11 +77,13 @@ export const useUpdatePost = () => {
 };
 
 export const useUpvotePost = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['UPVOTE'],
     mutationFn: async (id: string) => await upvotePost(id),
     onSuccess: () => {
       toast.success('Upvoted');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -84,11 +92,13 @@ export const useUpvotePost = () => {
 };
 
 export const useDownvotePost = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['DOWNVOTE'],
     mutationFn: async (id: string) => await downvotePost(id),
     onSuccess: () => {
       toast.success('Downvoted');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);

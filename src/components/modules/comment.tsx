@@ -16,10 +16,10 @@ import { RotatingLines } from 'react-loader-spinner';
 
 export default function SingleComment({
   comment,
-  refetch,
-}: {
+}: //   refetch,
+{
   comment: IComment;
-  refetch: () => void;
+  //   refetch: () => void;
 }) {
   const [commentText, setCommentText] = React.useState(comment.comment);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -54,7 +54,7 @@ export default function SingleComment({
       },
       {
         onSuccess: () => {
-          refetch();
+          //   refetch();
           setIsEdit(false);
         },
       }
@@ -68,7 +68,7 @@ export default function SingleComment({
       },
       {
         onSuccess: () => {
-          refetch();
+          //   refetch();
         },
       }
     );
