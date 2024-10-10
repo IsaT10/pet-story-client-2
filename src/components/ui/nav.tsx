@@ -1,12 +1,13 @@
 'use client';
 
-import { useUser } from '@/context/user.provider';
+import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
-import React from 'react';
-import avatar from '@/assets/images/avatar.png';
-import { Cross, Menu } from 'lucide-react';
-import { CreateContentModal } from '../modules/create-model';
 import Link from 'next/link';
+import { Cross, Menu } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import avatar from '@/assets/images/avatar.png';
+import { useUser } from '@/context/user.provider';
+import { CreateContentModal } from '../modules/create-model';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,65 +15,81 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from './button';
 import { logout } from '@/services/auth';
-import { usePathname, useRouter } from 'next/navigation';
 import { protectedRoutes } from '@/constant';
 
+const NAV_ITEMS = [
+  { href: '/', label: 'Home' },
+  { href: '/about-us', label: 'About us' },
+  { href: '/contact-us', label: 'Projects' },
+  { href: '/profile', label: 'Profile' },
+];
+
 export default function Nav() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, setIsLoading } = useUser();
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleLogout = () => {
+  // Memoized logout handler
+  const handleLogout = useCallback(() => {
     logout();
     if (protectedRoutes.some((route) => pathname.match(route))) {
       router.push('/');
     }
     setIsLoading(true);
-  };
+  }, [pathname, router, setIsLoading]);
+
+  // Toggle mobile menu
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  // Close mobile menu
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <nav
-      className={`transition-all duration-300  top-0 fixed w-full py-4 z-50 bg-white  border-b border-stone-200`}
-    >
-      <div className='w-full px-4  md:px-8 lg:px-10 flex items-center justify-between'>
+    <nav className='transition-all  duration-300 fixed top-0 w-full py-4 z-50 bg-white border-b border-stone-200'>
+      <div className='w-full relative px-4 md:px-8 lg:px-10 flex items-center justify-between'>
         <h1 className='text-3xl font-semibold'>Pet</h1>
-        {/* <img className='h-[30px] md:h-[36px]' src={logo} alt='logo' /> */}
-        <div className='flex items-center gap-4 md:hidden'>
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className='text-[#6D6D75] hover:text-black '
-          >
-            <Menu />
-          </button>
-        </div>
-        <ul className='hidden md:flex gap-8'>
-          <li>
-            <Link href='/'>Home</Link>
-          </li>
-          <li>
-            <Link href='/about-us'>About us</Link>
-          </li>
-          <li>
-            <Link href='/contact-us'>Projects</Link>
-          </li>
-          <li>
-            <Link href='/profile'>Profile</Link>
-          </li>
+
+        {/* Mobile Menu Toggle */}
+
+        {/* Desktop Menu */}
+        <ul className='hidden md:flex gap-6 lg:gap-8 absolute left-1/2 -translate-x-1/2'>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className={`${
+                  item.href === pathname
+                    ? 'text-primary font-medium'
+                    : 'hover:font-medium hover:text-primary'
+                }`}
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
         </ul>
 
+        {/* User Actions */}
         {user ? (
           <div className='flex items-center gap-6'>
-            <CreateContentModal />
-
+            <button
+              onClick={toggleMobileMenu}
+              className='md:hidden text-[#6D6D75] hover:text-black'
+            >
+              <Menu />
+            </button>
+            <div className='hidden md:block'>
+              <CreateContentModal />
+            </div>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild className='cursor-pointer'>
+              <DropdownMenuTrigger asChild>
                 <Image
                   src={user?.image || avatar}
                   width={40}
                   height={40}
                   alt='profile-image'
-                  className='rounded-full'
+                  className='rounded-full cursor-pointer'
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -81,16 +98,16 @@ export default function Nav() {
               >
                 <Link
                   href='/profile'
-                  className='block w-full text-left py-1 rounded-sm hover:bg-primary duration-200 pl-4 hover:text-white '
+                  className='block w-full text-left py-1 rounded-sm hover:bg-primary pl-4 hover:text-white'
                 >
                   Profile
                 </Link>
-                <button className='block w-full text-left py-1 rounded-sm hover:bg-primary duration-200 pl-4 hover:text-white '>
+                <button className='block w-full text-left py-1 rounded-sm hover:bg-primary pl-4 hover:text-white'>
                   Dashboard
                 </button>
                 <button
-                  onClick={() => handleLogout()}
-                  className='w-full text-left pl-4 text-red-600 font-medium hover:bg-red-700 hover:text-white py-1 rounded-md duration-200'
+                  onClick={handleLogout}
+                  className='w-full text-left pl-4 text-red-600 font-medium hover:bg-red-700 hover:text-white py-1 rounded-md'
                 >
                   Logout
                 </button>
@@ -106,48 +123,34 @@ export default function Nav() {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 right-0 w-full  h-full bg-white shadow-lg transition-transform duration-300 transform ${
+        className={`fixed top-0 right-0 w-full h-full bg-white shadow-lg transition-transform duration-300 ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className='flex items-center  justify-end p-4'>
-          {/* <img className='h-[43px]' src={logo} alt='logo' /> */}
+        <div className='flex items-center justify-end p-4'>
           <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            className='text-[#6D6D75] hover:text-black '
+            onClick={closeMobileMenu}
+            className='text-[#6D6D75] hover:text-black'
           >
             <Cross size={24} />
           </button>
         </div>
         <ul className='flex flex-col items-center space-y-6 mt-8'>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.href}>
+              <a href={item.href} onClick={closeMobileMenu}>
+                {item.label}
+              </a>
+            </li>
+          ))}
           <li>
-            <a href='#hero' onClick={() => setIsMobileMenuOpen(false)}>
-              Home
-            </a>
-          </li>
-          <li>
-            <a href='#about-us' onClick={() => setIsMobileMenuOpen(false)}>
-              About us
-            </a>
-          </li>
-          <li>
-            <a href='#featured' onClick={() => setIsMobileMenuOpen(false)}>
-              Projects
-            </a>
-          </li>
-          <li>
-            <a href='#services' onClick={() => setIsMobileMenuOpen(false)}>
-              Services
-            </a>
-          </li>
-          <li>
-            <a
-              href='#contact'
-              className='px-6 py-3 rounded-full text-white bg-black font-medium text-[16px]'
-              onClick={() => setIsMobileMenuOpen(false)}
+            <Link
+              href='/login'
+              className='px-6 py-3 rounded-lg text-white bg-primary font-medium text-[16px]'
+              onClick={closeMobileMenu}
             >
-              Contact Us
-            </a>
+              Login
+            </Link>
           </li>
         </ul>
       </div>

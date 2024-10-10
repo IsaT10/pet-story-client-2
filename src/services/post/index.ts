@@ -46,6 +46,18 @@ export const getPostByUser = async () => {
     throw new Error(error?.message);
   }
 };
+export const getPostBySingleUser = async (id: string) => {
+  try {
+    const res = await fetch(`${envConfig.baseApi}/posts?author=${id}`, {
+      next: { tags: ['posts'] },
+    });
+    const data = await res.json();
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
+};
 
 export const createPost = async (postData: FormData) => {
   try {

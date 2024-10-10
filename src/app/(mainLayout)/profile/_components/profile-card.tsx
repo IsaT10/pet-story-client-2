@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserList from './user-list';
 import EditProfile from './edit-profile';
-import preimumIcon from '@/assets/images/premiumUser.png';
 import { PremiumUser } from '@/components/ui/icon';
+import avatar from '@/assets/images/avatar.png';
 
 type TProps = {
   profile: IUser;
@@ -18,7 +18,7 @@ export default function ProfileCard({ profile }: TProps) {
     <div className=''>
       <div className='relative w-max'>
         <Image
-          src={image}
+          src={image || avatar}
           alt='profile-image'
           width={88}
           height={88}

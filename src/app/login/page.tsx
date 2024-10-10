@@ -1,5 +1,6 @@
 'use client';
 
+import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
@@ -81,4 +82,13 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+// Wrap your LoginPage component in a Suspense boundary
+const WrappedLoginPage = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <LoginPage />
+    </Suspense>
+  );
+};
+
+export default WrappedLoginPage;

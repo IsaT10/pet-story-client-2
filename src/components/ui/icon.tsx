@@ -94,7 +94,7 @@ export const Pencil = ({ color }: { color?: string }) => (
     />
   </svg>
 );
-export const Eyeslash = ({ color }: { color?: string }) => (
+export const Eyeslash = () => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     fill='none'

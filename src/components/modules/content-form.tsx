@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
 
 import {
   useCreatePost,
@@ -13,14 +14,12 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '../ui/button';
-import { RotatingLines } from 'react-loader-spinner';
-import { SelectLabel } from '@radix-ui/react-select';
-import { useUser } from '@/context/user.provider';
-import { IPost } from '@/types';
+// import { RotatingLines } from 'react-loader-spinner';
 
 type TProps = {
   postId?: string;
@@ -249,16 +248,17 @@ const ContentForm = ({
         } text-sm mt-16`}
       >
         {createPending || updatePending ? (
-          <RotatingLines
-            visible
-            height='20'
-            width='20'
-            strokeWidth='5'
-            strokeColor='white'
-            animationDuration='0.75'
-            ariaLabel='rotating-lines-loading'
-            className='text-white stroke-white'
-          />
+          // <RotatingLines
+          //   visible
+          //   height='20'
+          //   width='20'
+          //   strokeWidth='5'
+          //   strokeColor='white'
+          //   animationDuration='0.75'
+          //   ariaLabel='rotating-lines-loading'
+          //   className='text-white stroke-white'
+          // />
+          <span>...</span>
         ) : (
           'Submit'
         )}

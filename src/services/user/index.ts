@@ -50,6 +50,17 @@ export const unfollowUser = async (id: string) => {
     throw new Error(error.message);
   }
 };
+export const followUser = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.patch(`/users/${id}/follow`);
+
+    revalidateTag('userProfile');
+    return data;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+};
 
 export const getSingleUser = async (id: string) => {
   try {
@@ -61,6 +72,22 @@ export const getSingleUser = async (id: string) => {
     console.log(error);
     throw new Error(error.message);
   }
+
+  // const accessToken = cookies().get('accessToken')?.value;
+  // try {
+  //   // const { data } = await axiosInstance.patch(`/users/${id}/unfollow`);
+
+  //   // revalidateTag('userProfile');
+  //   // return data;
+  //   const res = await fetch(`${envConfig.baseApi}/users/${id}`);
+
+  //   const data = await res.json();
+
+  //   return data;
+  // } catch (error: any) {
+  //   console.log(error);
+  //   throw new Error(error.message);
+  // }
 };
 
 export const updateUser = async (updateData: FormData, id: string) => {

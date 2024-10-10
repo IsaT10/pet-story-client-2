@@ -1,7 +1,10 @@
 'use client';
 
-import FormSelect from '@/components/form/FormSelect';
-import ContentForm from '@/components/modules/content-form';
+import dynamic from 'next/dynamic';
+const ContentForm = dynamic(() => import('@/components/modules/content-form'), {
+  ssr: false,
+});
+// import ContentForm from '@/components/modules/content-form';
 import Post from '@/components/modules/Post';
 import SearchingFiltering from '@/components/modules/searchng-filtering';
 import {
@@ -12,11 +15,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Pencil } from '@/components/ui/icon';
-import PostLoadingSkeleton, {
-  PostLoadingSkeletonLeft,
-} from '@/components/ui/post-loading-skeleton';
-import { Skeleton } from '@/components/ui/skeleton';
-import { categoryOptions, contentTypeOptions } from '@/constant';
+import { PostLoadingSkeletonLeft } from '@/components/ui/post-loading-skeleton';
 import { useGetAllPosts } from '@/hooks/post.hook';
 import useDebounce from '@/hooks/use.debounce';
 import { IPost } from '@/types';
@@ -28,7 +27,7 @@ export default function Home() {
   const [type, setType] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(false);
   const [sortOption, setSortOption] = React.useState('');
-  const [sortLoading, setSortLoading] = React.useState(false);
+  // const [sortLoading, setSortLoading] = React.useState(false);
   const isPremium =
     type === 'basic' ? false : type === 'premium' ? true : 'all';
 
@@ -45,7 +44,7 @@ export default function Home() {
 
   React.useEffect(() => {
     if (data?.data?.result) {
-      let posts = [...data.data.result];
+      const posts = [...data.data.result];
 
       if (sortOption === 'rank') {
         posts.sort((a, b) => {
@@ -93,7 +92,7 @@ export default function Home() {
 
   return (
     <div className='flex items-start '>
-      {isLoading || sortLoading ? (
+      {isLoading ? (
         <div className=' w-[65%] pr-10  pt-10 '>
           <PostLoadingSkeletonLeft />
         </div>

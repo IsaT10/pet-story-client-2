@@ -1,12 +1,15 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import FormInput from '@/components/form/FormInput';
 import { Button } from '@/components/ui/button';
 import Loading from '@/components/ui/loading';
+import { useUser } from '@/context/user.provider';
 import { useUserRegistration } from '@/hooks/auth.hook';
 import registerValidationSchema from '@/schema/register.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { ChangeEvent } from 'react';
 import {
   FieldValues,
@@ -19,6 +22,8 @@ export default function RegisterPage() {
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const [imagePreview, setImagePreview] = React.useState('');
   const { mutate: handleRegisterUser, isPending } = useUserRegistration();
+  const router = useRouter();
+  const { setIsLoading: userLoading } = useUser();
   const methods = useForm({
     resolver: zodResolver(registerValidationSchema),
   });
@@ -39,11 +44,13 @@ export default function RegisterPage() {
     handleRegisterUser(formData, {
       onSuccess: () => {
         // Reset the form and clear images on success
+        router.push('/');
         reset();
         setImageFile(null);
         setImagePreview('');
       },
     });
+    userLoading(true);
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {

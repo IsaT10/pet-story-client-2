@@ -12,7 +12,7 @@ import { useUser } from '@/context/user.provider';
 import { useDeleteComment, useUpdateComment } from '@/hooks/comment.hook';
 import React from 'react';
 import { Send } from '../ui/icon';
-import { RotatingLines } from 'react-loader-spinner';
+// import { RotatingLines } from 'react-loader-spinner';
 
 export default function SingleComment({
   comment,
@@ -100,16 +100,17 @@ export default function SingleComment({
           />
           <button className='absolute right-4 top-5'>
             {isPending ? (
-              <RotatingLines
-                visible
-                height='20'
-                width='20'
-                strokeWidth='5'
-                strokeColor='#6A5ACD'
-                animationDuration='0.75'
-                ariaLabel='rotating-lines-loading'
-                className='text-white stroke-white'
-              />
+              // <RotatingLines
+              //   visible
+              //   height='20'
+              //   width='20'
+              //   strokeWidth='5'
+              //   strokeColor='#6A5ACD'
+              //   animationDuration='0.75'
+              //   ariaLabel='rotating-lines-loading'
+              //   className='text-white stroke-white'
+              // />
+              <span>...</span>
             ) : (
               <Send />
             )}

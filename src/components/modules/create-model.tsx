@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Dialog,
   DialogContent,
@@ -7,7 +9,10 @@ import {
 } from '@/components/ui/dialog';
 import React from 'react';
 import { Pencil } from '../ui/icon';
-import ContentForm from './content-form';
+import dynamic from 'next/dynamic';
+const ContentForm = dynamic(() => import('./content-form'), {
+  ssr: false,
+});
 
 export function CreateContentModal() {
   const [isHovered, setIsHovered] = React.useState(false);
@@ -27,7 +32,7 @@ export function CreateContentModal() {
       </DialogTrigger>
       <DialogContent className='max-w-[70%] max-h-[90vh] overflow-y-auto '>
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Create Post</DialogTitle>
         </DialogHeader>
         <ContentForm setIsOpen={setIsOpen} />
       </DialogContent>

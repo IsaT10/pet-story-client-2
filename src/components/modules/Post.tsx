@@ -37,12 +37,13 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, MoreVertical } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { Button } from '../ui/button';
 import { EditContentModal } from './edit-modal';
 import SingleComment from './comment';
-import { RotatingLines } from 'react-loader-spinner';
+// import { RotatingLines } from 'react-loader-spinner';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type TProps = {
   post: IPost;
@@ -57,22 +58,22 @@ export default function Post({ post }: TProps) {
     comments,
     isPremium,
     downvotes,
-
     createdAt,
     upvotes,
     _id,
   } = post;
-
   const { user, isLoading } = useUser();
-
   const [showComment, setShowComment] = useState(false);
   const [showFullContent, setShowFullContent] = React.useState(false);
   const [userVote, setUserVote] = React.useState<'upvote' | 'downvote' | null>(
     null
   );
   const [commentText, setCommentText] = useState('');
-  const [upvoteCount, setUpvoteCount] = React.useState(upvotes.length);
-  const [downvoteCount, setDownvoteCount] = React.useState(downvotes.length);
+  const [upvoteCount, setUpvoteCount] = React.useState(upvotes?.length);
+  const [downvoteCount, setDownvoteCount] = React.useState(downvotes?.length);
+  const pathname = usePathname(); // Use usePathname to get the current path
+
+  console.log('Current Path:', pathname);
 
   const { mutate: handleUpvotesPost } = useUpvotePost();
   const { mutate: handleDownvotesPost } = useDownvotePost();
@@ -159,7 +160,7 @@ export default function Post({ post }: TProps) {
     );
   };
   const previewContent =
-    content.length > 300 ? content.substring(0, 500) + '...' : content;
+    content?.length > 300 ? content.substring(0, 500) + '...' : content;
   return (
     <div className='mb-20 '>
       <div className='flex justify-between items-start'>
@@ -188,58 +189,82 @@ export default function Post({ post }: TProps) {
           </div>
         </div>
 
-        <div className='flex gap-4'>
+        <div className='flex gap-4 items-center'>
           {isPremium ? <PremiumPost /> : ''}
 
-          {author._id === user?._id ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className='bg--100 p-3 rounded-full hover:bg-stone-100'>
-                  <MoreHorizontal className='h-4 w-4' />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className='bg-white w-[100px] border shadow-sm rounded-lg p-1'
-                align='center'
-              >
-                <EditContentModal post={post} />
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <button className='px-4 py-1.5 text-sm rounded-md w-full text-left hover:bg-stone-100 hover:outine-none'>
-                      Delete post
+          {pathname === '/profile' || pathname === '/' ? (
+            <>
+              {' '}
+              {author._id === user?._id ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className='bg--100 p-3 rounded-full hover:bg-stone-100'>
+                      <MoreHorizontal className='h-4 w-4' />
                     </button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className='px-6 pt-6 h-[240px]'>
-                    <AlertDialogHeader className=''>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>
-                        <Button variant='outline' className='py-[7px]'>
-                          Cancel
-                        </Button>
-                      </AlertDialogCancel>
-                      <AlertDialogAction>
-                        <Button
-                          onClick={handleDelete}
-                          variant='default'
-                          className='py-2'
-                        >
-                          Continue
-                        </Button>
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className='bg-white w-[100px] border shadow-sm rounded-lg p-1'
+                    align='center'
+                  >
+                    <EditContentModal post={post} />
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button className='px-4 py-1.5 text-sm rounded-md w-full text-left hover:bg-stone-100 hover:outine-none'>
+                          Delete post
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className='px-6 pt-6 h-[240px]'>
+                        <AlertDialogHeader className=''>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your account and remove your data from our
+                            servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>
+                            <Button variant='outline' className='py-[7px]'>
+                              Cancel
+                            </Button>
+                          </AlertDialogCancel>
+                          <AlertDialogAction>
+                            <Button
+                              onClick={handleDelete}
+                              variant='default'
+                              className='py-2'
+                            >
+                              Continue
+                            </Button>
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className='bg--100 p-3 rounded-full hover:bg-stone-100'>
+                      <MoreHorizontal className='h-4 w-4' />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className='bg-white w-[100px] border shadow-sm rounded-lg p-1'
+                    align='center'
+                  >
+                    <Link
+                      href={`/profile/${author._id}`}
+                      className='px-4 py-1.5 text-sm rounded-md w-full text-left hover:bg-stone-100 hover:outine-none'
+                    >
+                      View Profile
+                    </Link>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </>
           ) : (
             ''
           )}
@@ -260,7 +285,7 @@ export default function Post({ post }: TProps) {
               : ''
           }`}
         >
-          {content.length > 300 && (
+          {content?.length > 300 && (
             <button
               className='text-blue-500 mt-2'
               onClick={() => setShowFullContent(!showFullContent)}
@@ -307,7 +332,7 @@ export default function Post({ post }: TProps) {
               <span className='mt-1'>
                 <Comment />
               </span>
-              <span>{comments.length}</span>
+              <span>{comments?.length}</span>
             </button>
           </div>
 
@@ -334,16 +359,17 @@ export default function Post({ post }: TProps) {
                   />
                   <button className='absolute right-4 top-5'>
                     {isPending ? (
-                      <RotatingLines
-                        visible
-                        height='20'
-                        width='20'
-                        strokeWidth='5'
-                        strokeColor='#6A5ACD'
-                        animationDuration='0.75'
-                        ariaLabel='rotating-lines-loading'
-                        className='text-white stroke-white'
-                      />
+                      // <RotatingLines
+                      //   visible
+                      //   height='20'
+                      //   width='20'
+                      //   strokeWidth='5'
+                      //   strokeColor='#6A5ACD'
+                      //   animationDuration='0.75'
+                      //   ariaLabel='rotating-lines-loading'
+                      //   className='text-white stroke-white'
+                      // />
+                      <span>...</span>
                     ) : (
                       <Send />
                     )}

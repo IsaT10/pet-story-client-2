@@ -1,28 +1,29 @@
 'use client';
 
 // import { RotatingLines } from 'react-loader-spinner';
-import { Button } from '@/components/ui/button';
-import { useUnfollowUser } from '@/hooks/user.hook';
+// import { Button } from '@/components/ui/button';
+// import { useUnfollowUser } from '@/hooks/user.hook';
 import { IUser } from '@/types';
 import Image from 'next/image';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+// } from '@/components/ui/alert-dialog';
 
 type TProps = { user: IUser; isFollowing?: boolean };
 
-export default function UserList({ user, isFollowing = false }: TProps) {
-  const { name, image, _id } = user;
-  const { mutate: handleUnfollow, isPending } = useUnfollowUser();
+// export default function SingleUserList({ user, isFollowing = false }: TProps) {
+export default function SingleUserList({ user }: TProps) {
+  const { name, image } = user;
+  //   const { mutate: handleUnfollow, isPending } = useUnfollowUser();
 
-  const handleUnfollowUser = () => {
-    handleUnfollow(_id);
-  };
+  //   const handleUnfollowUser = () => {
+  //     handleUnfollow(_id);
+  //   };
 
   return (
     <div className='flex gap-3 items-center py-3'>
@@ -36,7 +37,7 @@ export default function UserList({ user, isFollowing = false }: TProps) {
       <div className='flex gap-6 w-full justify-between items-start'>
         <p className='font-medium '>{name}</p>
 
-        <AlertDialog>
+        {/* <AlertDialog>
           <AlertDialogTrigger asChild>
             {isFollowing ? (
               <Button
@@ -85,7 +86,7 @@ export default function UserList({ user, isFollowing = false }: TProps) {
               Cancel
             </AlertDialogCancel>
           </AlertDialogContent>
-        </AlertDialog>
+        </AlertDialog> */}
       </div>
     </div>
   );

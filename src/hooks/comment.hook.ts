@@ -22,6 +22,7 @@ export const useCreateComment = () => {
       toast.success('Comment submitted successfully!');
 
       queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
+      queryClient.invalidateQueries({ queryKey: ['POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -43,6 +44,7 @@ export const useUpdateComment = () => {
     onSuccess: () => {
       toast.success('Comment updated successfully!');
       queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
+      queryClient.invalidateQueries({ queryKey: ['POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -58,6 +60,7 @@ export const useDeleteComment = () => {
     onSuccess: () => {
       toast.success('Comment deleted successfully!');
       queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
+      queryClient.invalidateQueries({ queryKey: ['POSTS'] });
     },
     onError: (error) => {
       toast.error(error.message);

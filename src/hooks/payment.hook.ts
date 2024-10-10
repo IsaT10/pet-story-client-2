@@ -1,5 +1,5 @@
 import { savePayemnt } from '@/services/payment';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useSavePayment = () => {

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -8,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { useUpdateProfile } from '@/hooks/user.hook';
 import React from 'react';
-import { RotatingLines } from 'react-loader-spinner';
+// import { RotatingLines } from 'react-loader-spinner';
 
 type TProps = { image: string; _id: string; name: string };
 
@@ -130,16 +131,17 @@ export default function EditProfile({ image, _id, name }: TProps) {
               disabled={!isModified}
             >
               {isPending ? (
-                <RotatingLines
-                  visible
-                  height='20'
-                  width='20'
-                  strokeWidth='5'
-                  strokeColor='white'
-                  animationDuration='0.75'
-                  ariaLabel='rotating-lines-loading'
-                  className='text-white stroke-white'
-                />
+                // <RotatingLines
+                //   visible
+                //   height='20'
+                //   width='20'
+                //   strokeWidth='5'
+                //   strokeColor='white'
+                //   animationDuration='0.75'
+                //   ariaLabel='rotating-lines-loading'
+                //   className='text-white stroke-white'
+                // />
+                <span>...</span>
               ) : (
                 'Save'
               )}

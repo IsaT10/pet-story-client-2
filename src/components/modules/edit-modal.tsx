@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Dialog,
   DialogContent,
@@ -6,8 +8,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import React from 'react';
-import ContentForm from './content-form';
+import dynamic from 'next/dynamic';
+// import ContentForm from './content-form';
 import { IPost } from '@/types';
+const ContentForm = dynamic(() => import('./content-form'), {
+  ssr: false,
+});
 
 type TProps = {
   post: IPost;
@@ -26,7 +32,7 @@ export function EditContentModal({ post }: TProps) {
       </DialogTrigger>
       <DialogContent className='max-w-[70%] max-h-[90vh] overflow-y-auto '>
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Edit Post</DialogTitle>
         </DialogHeader>
         <ContentForm
           category={category}

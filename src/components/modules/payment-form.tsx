@@ -66,15 +66,23 @@ export default function PaymentForm() {
         toast.success('Payment denied', { id: sonnerId });
       } else if (paymentIntent.status === 'succeeded') {
         try {
-          await updateUserStatus(user?._id!);
-          logout();
+          await updateUserStatus(user!._id);
+
+          handleSavePayment(
+            { expiredDate },
+            {
+              onSuccess: () => {
+                logout();
+                setIsLoading(true);
+                router.push('/success');
+              },
+            }
+          );
           toast.success('Payment complete', { id: sonnerId });
-          setIsLoading(true);
-          handleSavePayment({ expiredDate });
-          router.push('/payment-success');
         } catch (error) {
           console.log(error);
           toast.error('Something went wrong!', { id: sonnerId });
+        } finally {
         }
       }
     }

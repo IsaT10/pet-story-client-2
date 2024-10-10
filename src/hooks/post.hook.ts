@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createPost,
   deletePost,
   downvotePost,
   getAllPost,
-  getPostByUser,
+  getPostBySingleUser,
   updatePost,
   upvotePost,
 } from '../services/post';
@@ -18,13 +19,13 @@ export const useGetAllPosts = (query: TQueryParam[]) => {
   });
 };
 
-// export const useGetPostByUser = (userId: string) => {
-//   return useQuery({
-//     queryKey: ['POSTS', userId],
-//     queryFn: () => getPostByUser(userId),
-//     enabled: !!userId,
-//   });
-// };
+export const useGetPostBySingleUser = (userId: string) => {
+  return useQuery({
+    queryKey: ['POSTS', userId],
+    queryFn: () => getPostBySingleUser(userId),
+    enabled: !!userId,
+  });
+};
 
 export const useDeletePost = (postId: string) => {
   const queryClient = useQueryClient();

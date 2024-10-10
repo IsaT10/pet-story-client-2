@@ -38,3 +38,43 @@ export function PostLoadingSkeletonRight() {
     </div>
   );
 }
+
+export function ProfileLoading() {
+  return (
+    <div className='w-[35%] pl-10 flex flex-col gap-3 pt-10 border-l h-screen sticky top-0 right-0 border-stone-300'>
+      <Skeleton className='size-24 mb-2 rounded-full' />
+      <div className='flex gap-6 '>
+        <Skeleton className='h-6 w-1/2 ' />
+        <Skeleton className='h-6 w-1/2 ' />
+      </div>
+
+      <Skeleton className='h-6 my-2  border-t w-full' />
+      <Skeleton className='h-8 my-2  border-t w-full' />
+
+      <div className='flex gap-4 items-center'>
+        <Skeleton className='size-14  rounded-full ' />
+        <Skeleton className='h-6  w-1/2' />
+      </div>
+      <div className='flex gap-4 items-center'>
+        <Skeleton className='size-14  rounded-full ' />
+        <Skeleton className='h-6  w-[60%]' />
+      </div>
+      <div className='flex gap-4 items-center'>
+        <Skeleton className='size-14  rounded-full ' />
+        <Skeleton className='h-6  w-[40%]' />
+      </div>
+      <div className='flex gap-4 items-center'>
+        <Skeleton className='size-14  rounded-full ' />
+        <Skeleton className='h-6  w-[70%]' />
+      </div>
+      <div className='flex gap-4 items-center'>
+        <Skeleton className='size-14  rounded-full ' />
+        <Skeleton className='h-6  w-1/2' />
+      </div>
+      <div className='flex gap-4 items-center'>
+        <Skeleton className='size-14  rounded-full ' />
+        <Skeleton className='h-6  w-1/2' />
+      </div>
+    </div>
+  );
+}
