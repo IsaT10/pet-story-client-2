@@ -7,11 +7,7 @@ import { TQueryParam } from '@/types';
 import { revalidateTag } from 'next/cache';
 import { getUserProfile } from '../auth';
 
-export const getAllPost = async (
-  query: TQueryParam[],
-  page: number,
-  limit: number
-) => {
+export const getAllPost = async (query: TQueryParam[]) => {
   try {
     const queryParams = new URLSearchParams();
 
@@ -23,12 +19,6 @@ export const getAllPost = async (
       });
     }
 
-    // Add pagination parameters to the query
-    queryParams.append('page', page.toString());
-    queryParams.append('limit', limit.toString());
-
-    console.log(`${envConfig.baseApi}/posts?${queryParams}`);
-
     const res = await fetch(`${envConfig.baseApi}/posts?${queryParams}`, {
       next: { tags: ['allposts'] }, // Next.js caching options
     });
@@ -36,6 +26,23 @@ export const getAllPost = async (
     const data = await res.json();
 
     return data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
+};
+
+export const updatePostStatus = async (
+  id: string,
+  payload: { isPublish: boolean }
+) => {
+  try {
+    const res = await axiosInstance.patch(
+      `/posts/change-status/${id}`,
+      payload
+    );
+    revalidateTag('allposts');
+
+    return res?.data;
   } catch (error: any) {
     throw new Error(error?.message);
   }

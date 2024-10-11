@@ -1,5 +1,6 @@
-import { savePayemnt } from '@/services/payment';
-import { useMutation } from '@tanstack/react-query';
+import { getPaymentHistory, savePayemnt } from '@/services/payment';
+import { TQueryParam } from '@/types';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useSavePayment = () => {
@@ -16,5 +17,12 @@ export const useSavePayment = () => {
     onError: (error) => {
       toast.error(error.message);
     },
+  });
+};
+
+export const useGetPaymentHistory = (query: TQueryParam[]) => {
+  return useQuery({
+    queryKey: ['ALL_PAYMENTS', query], // Include page in queryKey for caching
+    queryFn: async () => await getPaymentHistory(query),
   });
 };

@@ -7,19 +7,16 @@ import {
   getAllPost,
   getPostBySingleUser,
   updatePost,
+  updatePostStatus,
   upvotePost,
 } from '../services/post';
 import { toast } from 'sonner';
 import { TQueryParam } from '@/types';
 
-export const useGetAllPosts = (
-  query: TQueryParam[],
-  page: number,
-  limit: number
-) => {
+export const useGetAllPosts = (query: TQueryParam[]) => {
   return useQuery({
-    queryKey: ['GET_ALL_POSTS', query, page], // Include page in queryKey for caching
-    queryFn: async () => await getAllPost(query, page, limit),
+    queryKey: ['GET_ALL_POSTS', query], // Include page in queryKey for caching
+    queryFn: async () => await getAllPost(query),
   });
 };
 
@@ -31,6 +28,23 @@ export const useGetPostBySingleUser = (userId: string) => {
   });
 };
 
+export const useUpdatePostStatus = (
+  postId: string,
+  payload: { isPublish: boolean }
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['UPDATE_STATUS', postId],
+    mutationFn: () => updatePostStatus(postId, payload),
+    onSuccess: () => {
+      toast.success('Post status changed successfully.');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
 export const useDeletePost = (postId: string) => {
   const queryClient = useQueryClient();
   return useMutation({

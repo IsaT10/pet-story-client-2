@@ -1,9 +1,12 @@
 import {
   followUser,
+  getAllUsers,
   getSingleUser,
   unfollowUser,
   updateUser,
+  updateUserStatus,
 } from '@/services/user';
+import { TQueryParam } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -18,6 +21,13 @@ type UpdateProfileParams = {
 //     queryFn: async () => getUserProfile(),
 //   });
 // };
+
+export const useGetAllUsers = (query: TQueryParam[]) => {
+  return useQuery({
+    queryKey: ['GET_ALL_USERS', query], // Include page in queryKey for caching
+    queryFn: async () => await getAllUsers(query),
+  });
+};
 
 export const useGetSingleUser = (id: string) => {
   return useQuery({
@@ -66,6 +76,24 @@ export const useUpdateProfile = () => {
     onSuccess: () => {
       toast.success('Update profile.');
       queryClient.invalidateQueries({ queryKey: ['USER'] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useUpdateUserStatus = (
+  userId: string,
+  payload: { status: string }
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['UPDATE_USER_STATUS', userId],
+    mutationFn: () => updateUserStatus(userId, payload),
+    onSuccess: () => {
+      toast.success('User status updated successfully.');
+      queryClient.invalidateQueries({ queryKey: ['ALL_PAYMENTS'] });
     },
     onError: (error) => {
       toast.error(error.message);

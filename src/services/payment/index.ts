@@ -3,6 +3,7 @@
 
 import envConfig from '@/config/envConfig';
 import { axiosInstance } from '@/lib/axiosInstance';
+import { TQueryParam } from '@/types';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
@@ -18,18 +19,19 @@ export const savePayemnt = async (data: { expiredDate: string }) => {
   }
 };
 
-export const getPaymentHistory = async () => {
-  const accessToken = cookies().get('accessToken')?.value;
+export const getPaymentHistory = async (query: TQueryParam[]) => {
   try {
-    const res = await fetch(`${envConfig.baseApi}/payments`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      next: { tags: ['payments'] },
-    });
+    const queryParams = new URLSearchParams();
 
-    const data = await res.json();
+    if (query) {
+      query.forEach((el: TQueryParam) => {
+        if (el.value !== 'all' && el.value !== '') {
+          queryParams.append(el.name, el.value as string);
+        }
+      });
+    }
+
+    const { data } = await axiosInstance.get(`/payments?${queryParams}`);
 
     return data;
   } catch (error: any) {

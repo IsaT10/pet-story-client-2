@@ -1,12 +1,13 @@
+import Sidebar from '@/components/ui/sidebar';
 import { ReactNode } from 'react';
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
     <div className='flex '>
-      <div className='w-[300px] bg-hover h-screen sticky left-0 top-0'>
-        sidebar
+      <div>
+        <Sidebar />
       </div>
-      <div>{children}</div>
+      <div className='pt-10 px-5 lg:px-10 flex-1'>{children}</div>
     </div>
   );
 }

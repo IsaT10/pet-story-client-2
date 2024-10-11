@@ -72,6 +72,7 @@ const ContentForm = ({
       content: value,
       category: postCategory,
       isPremium: contentType === 'premium',
+      isPublish: true,
     };
 
     formData.append('data', JSON.stringify(postData));

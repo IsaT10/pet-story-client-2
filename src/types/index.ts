@@ -8,6 +8,7 @@ export interface IPost {
   _id: string;
   category: string;
   isPremium: boolean;
+  isPublish: boolean;
   upvotes: string[];
   downvotes: string[];
   comments: IComment[];
@@ -65,4 +66,12 @@ export interface IInput {
   label: string;
   name: string;
   disabled?: boolean;
+}
+
+export interface IPayment {
+  _id: string;
+  user: IUser;
+  expiredDate: string;
+  createdAt: string;
+  updatedAt: string;
 }

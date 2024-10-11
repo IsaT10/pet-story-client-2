@@ -102,9 +102,12 @@ export default function Nav() {
                 >
                   Profile
                 </Link>
-                <button className='block w-full text-left py-1 rounded-sm hover:bg-primary pl-4 hover:text-white'>
+                <Link
+                  href='/admin/user-manage'
+                  className='block w-full text-left py-1 rounded-sm hover:bg-primary pl-4 hover:text-white'
+                >
                   Dashboard
-                </button>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className='w-full text-left pl-4 text-red-600 font-medium hover:bg-red-700 hover:text-white py-1 rounded-md'

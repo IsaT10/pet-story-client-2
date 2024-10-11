@@ -3,6 +3,7 @@
 
 import envConfig from '@/config/envConfig';
 import { axiosInstance } from '@/lib/axiosInstance';
+import { TQueryParam } from '@/types';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
@@ -101,15 +102,41 @@ export const updateUser = async (updateData: FormData, id: string) => {
     throw new Error(error?.message);
   }
 };
-export const updateUserStatus = async (id: string) => {
+export const updateUserStatus = async (
+  id: string,
+  payload: { status: string }
+) => {
   try {
-    const res = await axiosInstance.patch(`/users/change-status/${id}`, {
-      status: 'premium',
-    });
+    const res = await axiosInstance.patch(
+      `/users/change-status/${id}`,
+      payload
+    );
     revalidateTag('userProfile');
 
     console.log(res.data);
     return res?.data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
+};
+
+export const getAllUsers = async (query: TQueryParam[]) => {
+  try {
+    const queryParams = new URLSearchParams();
+
+    if (query) {
+      query.forEach((el: TQueryParam) => {
+        if (el.value !== 'all' && el.value !== '') {
+          queryParams.append(el.name, el.value as string);
+        }
+      });
+    }
+
+    const { data } = await axiosInstance.get(`/users?${queryParams}`);
+
+    // const data = await res.json();
+
+    return data;
   } catch (error: any) {
     throw new Error(error?.message);
   }
