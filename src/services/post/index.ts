@@ -7,17 +7,25 @@ import { TQueryParam } from '@/types';
 import { revalidateTag } from 'next/cache';
 import { getUserProfile } from '../auth';
 
-export const getAllPost = async (query: TQueryParam[]) => {
+export const getAllPost = async (
+  query: TQueryParam[],
+  page: number,
+  limit: number
+) => {
   try {
     const queryParams = new URLSearchParams();
 
     if (query) {
-      query?.forEach((el: TQueryParam) => {
+      query.forEach((el: TQueryParam) => {
         if (el.value !== 'all' && el.value !== '') {
           queryParams.append(el.name, el.value as string);
         }
       });
     }
+
+    // Add pagination parameters to the query
+    queryParams.append('page', page.toString());
+    queryParams.append('limit', limit.toString());
 
     console.log(`${envConfig.baseApi}/posts?${queryParams}`);
 

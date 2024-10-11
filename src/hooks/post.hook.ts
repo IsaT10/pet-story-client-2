@@ -12,10 +12,14 @@ import {
 import { toast } from 'sonner';
 import { TQueryParam } from '@/types';
 
-export const useGetAllPosts = (query: TQueryParam[]) => {
+export const useGetAllPosts = (
+  query: TQueryParam[],
+  page: number,
+  limit: number
+) => {
   return useQuery({
-    queryKey: ['GET_ALL_POSTS', query],
-    queryFn: () => getAllPost(query),
+    queryKey: ['GET_ALL_POSTS', query, page], // Include page in queryKey for caching
+    queryFn: async () => await getAllPost(query, page, limit),
   });
 };
 

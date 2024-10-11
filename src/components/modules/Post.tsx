@@ -73,8 +73,6 @@ export default function Post({ post }: TProps) {
   const [downvoteCount, setDownvoteCount] = React.useState(downvotes?.length);
   const pathname = usePathname(); // Use usePathname to get the current path
 
-  console.log('Current Path:', pathname);
-
   const { mutate: handleUpvotesPost } = useUpvotePost();
   const { mutate: handleDownvotesPost } = useDownvotePost();
   const { mutate: handleComment, isPending } = useCreateComment();
