@@ -1,7 +1,5 @@
-import { IPayment, IPost } from '@/types';
+import { IPayment } from '@/types';
 import { Button } from './button';
-import { updatePostStatus } from '@/services/post';
-import { useUpdatePostStatus } from '@/hooks/post.hook';
 import { Spinner } from './icon';
 import { formatDateToMMDDYYYY } from '@/app/utils/formatDate';
 import { useUpdateUserStatus } from '@/hooks/user.hook';

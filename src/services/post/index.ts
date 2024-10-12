@@ -19,8 +19,6 @@ export const getAllPost = async (query: TQueryParam[]) => {
       });
     }
 
-    console.log(queryParams);
-
     const res = await fetch(`${envConfig.baseApi}/posts?${queryParams}`, {
       next: { tags: ['allposts'] }, // Next.js caching options
     });
@@ -42,7 +40,7 @@ export const updatePostStatus = async (
       `/posts/change-status/${id}`,
       payload
     );
-    revalidateTag('allposts');
+    // revalidateTag('allposts');
 
     return res?.data;
   } catch (error: any) {

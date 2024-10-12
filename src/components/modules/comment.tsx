@@ -11,7 +11,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { useUser } from '@/context/user.provider';
 import { useDeleteComment, useUpdateComment } from '@/hooks/comment.hook';
 import React from 'react';
-import { Send } from '../ui/icon';
+import { Send, Spinner } from '../ui/icon';
 // import { RotatingLines } from 'react-loader-spinner';
 
 export default function SingleComment({
@@ -100,17 +100,7 @@ export default function SingleComment({
           />
           <button className='absolute right-4 top-5'>
             {isPending ? (
-              // <RotatingLines
-              //   visible
-              //   height='20'
-              //   width='20'
-              //   strokeWidth='5'
-              //   strokeColor='#6A5ACD'
-              //   animationDuration='0.75'
-              //   ariaLabel='rotating-lines-loading'
-              //   className='text-white stroke-white'
-              // />
-              <span>...</span>
+              <Spinner className='animate-spin h-5  text-primary' />
             ) : (
               <Send />
             )}

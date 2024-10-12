@@ -32,7 +32,7 @@ const NutritionForm: React.FC<NutritionFormProps> = ({ onSubmit }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='max-w-md mx-auto py-10 px-10 border border-stone-300  rounded-lg'
+      className='max-w-[750px] mx-auto p-6 md:p-10 border border-stone-300  rounded-lg'
     >
       <h2 className='text-xl font-semibold mb-8  text-center'>
         Pet Nutrition Calculator

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cross, Menu } from 'lucide-react';
@@ -15,12 +15,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from './button';
 import { logout } from '@/services/auth';
-import { protectedRoutes } from '@/constant';
+import { useGetSingleUser } from '@/hooks/user.hook';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home' },
   { href: '/about-us', label: 'About us' },
-  { href: '/contact-us', label: 'Projects' },
+  { href: '/contact-us', label: 'Contact Us' },
   { href: '/user-dashboard', label: 'User Dashboard' },
 ];
 
@@ -30,23 +30,23 @@ export default function Nav() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Memoized logout handler
-  const handleLogout = useCallback(() => {
-    logout();
-    if (protectedRoutes.some((route) => pathname.match(route))) {
-      router.push('/');
-    }
-    setIsLoading(true);
-  }, [pathname, router, setIsLoading]);
+  const { data } = useGetSingleUser(user?._id!);
 
-  // Toggle mobile menu
+  // Memoized logout handler
+  const handleLogout = () => {
+    logout();
+    // if (protectedRoutes.some((route) => pathname.match(route))) {
+    router.push('/');
+    // }
+    setIsLoading(true);
+  };
+
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  // Close mobile menu
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <nav className='transition-all  duration-300 fixed top-0 w-full py-4 z-50 bg-white border-b border-stone-200'>
+    <nav className='transition-all shadow-md duration-300 fixed top-0 w-full py-4 z-50 bg-white border-b border-stone-200'>
       <div className='w-full relative px-4 md:px-8 lg:px-10 flex items-center justify-between'>
         <h1 className='text-3xl font-semibold'>Pet</h1>
 
@@ -85,7 +85,7 @@ export default function Nav() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Image
-                  src={user?.image || avatar}
+                  src={data?.data?.image || avatar}
                   width={40}
                   height={40}
                   alt='profile-image'
@@ -103,7 +103,11 @@ export default function Nav() {
                   Profile
                 </Link>
                 <Link
-                  href='/admin/user-manage'
+                  href={
+                    user?.role === 'admin'
+                      ? '/admin/user-manage'
+                      : 'user-dashboard'
+                  }
                   className='block w-full text-left py-1 rounded-sm hover:bg-primary pl-4 hover:text-white'
                 >
                   Dashboard

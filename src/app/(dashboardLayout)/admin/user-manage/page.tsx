@@ -33,7 +33,7 @@ export default function UserManage() {
 
         <span className='flex-1 text-center'>Status</span>
 
-        {/* <span className='flex-[.5] text-center'>Actions</span> */}
+        <span className='flex-1 text-center'>Actions</span>
       </div>
 
       <div className='rounded-lg border border-t-0 dark:border-stone-700 rounded-t-none border-stone-200 divide-y divide-stone-200 dark:divide-stone-950 mb-10'>

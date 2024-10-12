@@ -19,6 +19,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '../ui/button';
+import { useUser } from '@/context/user.provider';
+import { Dialog, DialogContent } from '../ui/dialog';
+import Link from 'next/link';
+import { Spinner } from '../ui/icon';
 // import { RotatingLines } from 'react-loader-spinner';
 
 type TProps = {
@@ -37,12 +41,11 @@ const ContentForm = ({
   setIsOpen,
   content,
   thumbnail,
-  //   refetch,
   postId,
   isEdit = false,
 }: TProps) => {
-  // const { user } = useUser();
-  // const { refetch } = useGetPostByUser(user?._id!);
+  const { user } = useUser();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [imageFile, setImageFile] = React.useState<File | string | null>(null);
   const [postCategory, setPostCategory] = React.useState('Story');
@@ -149,6 +152,14 @@ const ContentForm = ({
     'color',
   ];
 
+  const handleContentTypeChange = (value: string) => {
+    if (value === 'premium' && user?.status !== 'premium') {
+      setIsModalOpen(true);
+      return;
+    }
+    setContentType(value);
+  };
+
   return (
     <div className='my-6'>
       <div className='flex gap-6 mb-6'>
@@ -170,10 +181,7 @@ const ContentForm = ({
           </SelectContent>
         </Select>
 
-        <Select
-          onValueChange={(value) => setContentType(value)}
-          value={contentType} // Set value to the selected state
-        >
+        <Select onValueChange={handleContentTypeChange} value={contentType}>
           <SelectTrigger className='w-[180px]'>
             <SelectValue placeholder='Content type' />
           </SelectTrigger>
@@ -234,6 +242,16 @@ const ContentForm = ({
           </div>
         </div>
       </div>
+      <Dialog open={isModalOpen} onOpenChange={(open) => setIsModalOpen(open)}>
+        <DialogContent className='max-w-lg h-[250px] flex flex-col items-center justify-center gap-8'>
+          <p className='text-2xl font-medium text-center '>
+            You are not a premium user
+          </p>
+          <Link href={'/subscription'}>
+            <Button className='py-2'>Want to post premium content?</Button>
+          </Link>
+        </DialogContent>
+      </Dialog>
       <QuillEditor
         className='h-[300px]'
         theme='snow'
@@ -242,24 +260,9 @@ const ContentForm = ({
         modules={modules}
         onChange={(value) => setValue(value)}
       />
-      <Button
-        onClick={handler}
-        className={`${
-          createPending || updatePending ? 'px-[29px]' : ''
-        } text-sm mt-16`}
-      >
+      <Button onClick={handler} className={` text-sm mt-16 w-24 h-10`}>
         {createPending || updatePending ? (
-          // <RotatingLines
-          //   visible
-          //   height='20'
-          //   width='20'
-          //   strokeWidth='5'
-          //   strokeColor='white'
-          //   animationDuration='0.75'
-          //   ariaLabel='rotating-lines-loading'
-          //   className='text-white stroke-white'
-          // />
-          <span>...</span>
+          <Spinner className='animate-spin h-4' />
         ) : (
           'Submit'
         )}

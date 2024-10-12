@@ -33,7 +33,7 @@ export default function ProfileCard({ profile }: TProps) {
         )}
       </div>
 
-      <div className='flex gap-[116px] items-center'>
+      <div className='flex gap-20 lg:gap-[116px] items-center'>
         <p className='mt-4 font-medium text-xl'>{name}</p>
         <EditProfile image={image} _id={_id} name={name} />
       </div>
@@ -50,7 +50,7 @@ export default function ProfileCard({ profile }: TProps) {
         </p>
       </div>
 
-      <Tabs defaultValue='follower' className='max-w-[400px] mt-7'>
+      <Tabs defaultValue='follower' className='max-w-[500px] mt-7'>
         <TabsList className='grid w-full grid-cols-2 border border-primary px-1 py-0 '>
           <TabsTrigger
             value='follower'

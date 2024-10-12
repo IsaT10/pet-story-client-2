@@ -10,6 +10,7 @@ import {
   PremiumPost,
   PremiumUser,
   Send,
+  Spinner,
   UpArrow,
 } from '../ui/icon';
 import { useUser } from '@/context/user.provider';
@@ -160,7 +161,7 @@ export default function Post({ post }: TProps) {
   const previewContent =
     content?.length > 300 ? content.substring(0, 500) + '...' : content;
   return (
-    <div className='mb-20 '>
+    <div className='mb-14 md:mb-20 w-full'>
       <div className='flex justify-between items-start'>
         <div className='flex items-start gap-2 mb-6'>
           <div className='relative'>
@@ -357,17 +358,7 @@ export default function Post({ post }: TProps) {
                   />
                   <button className='absolute right-4 top-5'>
                     {isPending ? (
-                      // <RotatingLines
-                      //   visible
-                      //   height='20'
-                      //   width='20'
-                      //   strokeWidth='5'
-                      //   strokeColor='#6A5ACD'
-                      //   animationDuration='0.75'
-                      //   ariaLabel='rotating-lines-loading'
-                      //   className='text-white stroke-white'
-                      // />
-                      <span>...</span>
+                      <Spinner className='animate-spin h-5  text-primary' />
                     ) : (
                       <Send />
                     )}

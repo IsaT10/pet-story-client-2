@@ -36,6 +36,7 @@ export const useGetSingleUser = (id: string) => {
       const [, userId] = queryKey;
       return getSingleUser(userId as string);
     },
+    enabled: !!id,
   });
 };
 

@@ -31,6 +31,14 @@ export const getUserProfile = async () => {
       next: { tags: ['userProfile'] },
     });
 
+    console.log(res);
+
+    if (!res.ok) {
+      throw new Error(
+        `Failed to fetch posts: ${res.statusText} (Status: ${res.status})`
+      );
+    }
+
     const data = await res.json();
 
     return data;
@@ -70,7 +78,6 @@ export const getSingleUser = async (id: string) => {
     // console.log(data);
     return data;
   } catch (error: any) {
-    console.log(error);
     throw new Error(error.message);
   }
 

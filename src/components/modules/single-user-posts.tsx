@@ -6,8 +6,15 @@ import { PostLoadingSkeletonLeft } from '../ui/post-loading-skeleton';
 type TProps = { id: string };
 
 export default function SingleUserPosts({ id }: TProps) {
-  const { data, isLoading } = useGetPostBySingleUser(id);
-  console.log(data?.data?.result);
+  const { data, isLoading, error } = useGetPostBySingleUser(id);
+
+  if (error)
+    return (
+      <div className='h-[calc(100vh-150px)] flex justify-center items-center text-red-600 font-semibold text-2xl'>
+        Unable to load data. Please check your internet connection and try
+        again.
+      </div>
+    );
 
   return (
     <div>
@@ -17,6 +24,7 @@ export default function SingleUserPosts({ id }: TProps) {
         </div>
       ) : (
         <>
+          <h2 className='mb-12 text-2xl font-semibold'>All Posts</h2>
           {data?.data?.result?.map((item: IPost) => (
             <Post key={item._id} post={item} />
           ))}

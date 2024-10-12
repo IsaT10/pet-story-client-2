@@ -3,7 +3,6 @@ import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 
 import { toast } from 'sonner';
 import { useUser } from '@/context/user.provider';
-import { updateUserStatus } from '@/services/user';
 import { logout } from '@/services/auth';
 import { useRouter } from 'next/navigation';
 import { useSavePayment } from '@/hooks/payment.hook';

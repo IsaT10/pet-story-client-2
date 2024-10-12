@@ -1,10 +1,9 @@
 'use client';
 
-import ContentList from '@/components/ui/content-list';
 import { Spinner } from '@/components/ui/icon';
 import PaymentList from '@/components/ui/payment-list';
 import { useGetPaymentHistory } from '@/hooks/payment.hook';
-import { IPayment, IPost } from '@/types';
+import { IPayment } from '@/types';
 
 export default function PaymentHistory() {
   const { data, isLoading, error } = useGetPaymentHistory([]);

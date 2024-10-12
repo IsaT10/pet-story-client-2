@@ -19,10 +19,9 @@ export default function UserList({ user }: TProps) {
         {user.status.toUpperCase()}
       </span>
 
-      {/* <span className='flex-[.5] text-center'>
-       
-        <Button className='py-2 px-6'>Delete</Button>
-      </span> */}
+      <span className='flex-1 text-center'>
+        <Button className='py-2 px-6'>Change Status</Button>
+      </span>
     </div>
   );
 }

@@ -6,18 +6,12 @@ export default async function ProfilePage() {
   const { data: userProfile } = await getUserProfile();
 
   return (
-    <div className='flex  items-start'>
-      {/* <div className=' w-[65%] py-10 '>
-        {userProfile?.posts.map((item: IPost) => (
-          <Post post={item} />
-        ))}
-      </div> */}
-
-      <div className='w-[65%] py-10 pr-10'>
+    <div className='flex md:flex-row flex-col-reverse items-start w-full'>
+      <div className='md:w-[65%] w-full pt-10 md:pt-20 pb-10 md:pr-6 lg:pr-10'>
         <MyPosts />
       </div>
 
-      <div className='w-[35%] pt-10 pl-10 min-h-screen border-l sticky top-0  right-0 border-stone-200'>
+      <div className='md:w-[35%] pt-10 md:pt-20  md:pl-6 lg:pl-10 min-h-screen md:border-l md:sticky top-0  right-0 border-stone-200'>
         <div className='sticky top-0'>
           <ProfileCard profile={userProfile} />
         </div>

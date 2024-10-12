@@ -182,7 +182,7 @@ export default function Home() {
     type === 'basic' ? false : type === 'premium' ? true : 'all';
   const delaySearch = useDebounce(searchTerm, 400);
 
-  const { data, isLoading } = useGetAllPosts([
+  const { data, isLoading, error } = useGetAllPosts([
     { name: 'searchTerm', value: delaySearch },
     { name: 'category', value: category },
     { name: 'isPremium', value: isPremium },
@@ -192,14 +192,14 @@ export default function Home() {
     { name: 'isPublish', value: true },
   ]);
 
-  console.log(sort);
+  console.log({ error });
 
   const [posts, setPosts] = useState<IPost[]>([]);
 
   useEffect(() => {
     if (data?.data?.result) {
       if (page === 1) {
-        setPosts(data.data.result);
+        setPosts(data.data.result); // Reset to new fetched data
       } else {
         setPosts((prevPosts) => [...prevPosts, ...data.data.result]);
       }
@@ -207,7 +207,7 @@ export default function Home() {
       setHasMore(data.data.result.length > 0);
     }
     setIsFetchingMore(false);
-  }, [data, searchTerm, category, isPremium, sort]);
+  }, [data, searchTerm, category, isPremium, sort, page]);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -239,6 +239,14 @@ export default function Home() {
     }
     setSort('-upvotes');
   };
+
+  if (error)
+    return (
+      <div className='h-[calc(100vh-150px)] flex justify-center items-center text-red-600 font-semibold text-2xl'>
+        Unable to load data. Please check your internet connection and try
+        again.
+      </div>
+    );
 
   return (
     <div className='flex items-start'>

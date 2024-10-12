@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Spinner } from '@/components/ui/icon';
 import { useUpdateProfile } from '@/hooks/user.hook';
 import React from 'react';
 // import { RotatingLines } from 'react-loader-spinner';
@@ -65,7 +66,7 @@ export default function EditProfile({ image, _id, name }: TProps) {
       <DialogTrigger asChild>
         <Button className='mt-6 py-1.5 text-sm'>Edit profile</Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[525px] px-10 py-8'>
+      <DialogContent className='w-[400px] sm:w-[525px] px-10 py-8'>
         <DialogHeader>
           <DialogTitle className='text-center mb-10 font-medium text-xl'>
             Profile information
@@ -100,7 +101,7 @@ export default function EditProfile({ image, _id, name }: TProps) {
               <button onClick={handleImg} className='text-primary text-sm'>
                 Update
               </button>
-              <button className='text-red-600 text-sm'>Remove</button>
+              {/* <button className='text-red-600 text-sm'>Remove</button> */}
             </div>
             <p className='text-sm text-stone-400'>
               Recommended: Square JPG or PNG at least 1,000 pixels per side.
@@ -124,27 +125,11 @@ export default function EditProfile({ image, _id, name }: TProps) {
             </div>
 
             <Button
-              className={`text-sm py-2.5  mt-1 mb-3 ${
-                isPending ? 'px-6' : 'px-5'
-              }`}
+              className={`text-sm py-2.5 w-20 h-10  mt-1 mb-3`}
               type='submit'
               disabled={!isModified}
             >
-              {isPending ? (
-                // <RotatingLines
-                //   visible
-                //   height='20'
-                //   width='20'
-                //   strokeWidth='5'
-                //   strokeColor='white'
-                //   animationDuration='0.75'
-                //   ariaLabel='rotating-lines-loading'
-                //   className='text-white stroke-white'
-                // />
-                <span>...</span>
-              ) : (
-                'Save'
-              )}
+              {isPending ? <Spinner className='animate-spin h-4' /> : 'Save'}
             </Button>
           </form>
         </div>

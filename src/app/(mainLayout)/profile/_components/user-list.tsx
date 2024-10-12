@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Spinner } from '@/components/ui/icon';
 
 type TProps = { user: IUser; isFollowing?: boolean };
 
@@ -44,17 +45,7 @@ export default function UserList({ user, isFollowing = false }: TProps) {
                 className={`py-1 ${isPending ? 'px-[33px]' : ''} text-sm `}
               >
                 {isPending ? (
-                  // <RotatingLines
-                  //   visible
-                  //   height='20'
-                  //   width='20'
-                  //   strokeWidth='5'
-                  //   strokeColor='#6A5ACD'
-                  //   animationDuration='0.75'
-                  //   ariaLabel='rotating-lines-loading'
-                  //   className='text-white stroke-white'
-                  // />
-                  <span>...</span>
+                  <Spinner className='animate-spin h-4' />
                 ) : (
                   'unfollow'
                 )}

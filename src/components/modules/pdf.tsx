@@ -14,7 +14,7 @@ export default function PDF() {
   };
 
   return (
-    <div className='min-h-screen p-6'>
+    <div className='min-h-screen w-full'>
       {nutritionData ? (
         <div className='mt-6'>
           <NutritionChart nutritionData={nutritionData} />
