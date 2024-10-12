@@ -19,6 +19,8 @@ export const getAllPost = async (query: TQueryParam[]) => {
       });
     }
 
+    console.log(queryParams);
+
     const res = await fetch(`${envConfig.baseApi}/posts?${queryParams}`, {
       next: { tags: ['allposts'] }, // Next.js caching options
     });

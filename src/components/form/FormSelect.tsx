@@ -13,6 +13,7 @@ type TFilterSelectProps = {
   setValue: (data: string) => void;
   label: string;
   options: { label: string; value: string }[];
+  allOption?: boolean;
 };
 
 export default function FormSelect({
@@ -20,6 +21,7 @@ export default function FormSelect({
   setValue,
   label,
   options,
+  allOption,
 }: TFilterSelectProps) {
   return (
     <Select value={value} onValueChange={(value) => setValue(value)}>
@@ -29,9 +31,13 @@ export default function FormSelect({
       <SelectContent>
         <SelectGroup>
           <SelectLabel>{label}</SelectLabel>
-          <SelectItem className='cursor-pointer' value='all'>
-            All
-          </SelectItem>
+          {allOption ? (
+            <SelectItem className='cursor-pointer' value='all'>
+              All
+            </SelectItem>
+          ) : (
+            ''
+          )}
           {options?.map((option) => (
             <SelectItem
               className='cursor-pointer'

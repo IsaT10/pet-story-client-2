@@ -30,12 +30,14 @@ export default function SearchingFiltering({
         className='border px-4 py-3 placeholder:text-textPrimary text-sm rounded-md outline-primary border-textSecondary w-full'
       />
       <FormSelect
+        allOption={true}
         label='Post Category'
         options={categoryOptions}
         setValue={setCategory}
         value={category}
       />
       <FormSelect
+        allOption={true}
         label='Post Type'
         options={contentTypeOptions}
         setValue={setType}

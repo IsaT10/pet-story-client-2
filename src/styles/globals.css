@@ -25,3 +25,9 @@ body {
 .custom-html h2 {
   font-size: 1.875rem; /* Equivalent to text-3xl */
 }
+
+@layer base {
+  img {
+    display: initial;
+  }
+}

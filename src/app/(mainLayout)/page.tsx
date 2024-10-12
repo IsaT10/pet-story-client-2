@@ -164,7 +164,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import ContentForm from '@/components/modules/content-form';
+import dynamic from 'next/dynamic';
+const ContentForm = dynamic(() => import('@/components/modules/content-form'), {
+  ssr: false,
+});
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -172,8 +175,8 @@ export default function Home() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [type, setType] = useState('');
   const [page, setPage] = useState(1);
-  const [sortOption, setSortOption] = React.useState('');
   const [hasMore, setHasMore] = useState(true);
+  const [sort, setSort] = useState('-createdAt');
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const isPremium =
     type === 'basic' ? false : type === 'premium' ? true : 'all';
@@ -183,10 +186,13 @@ export default function Home() {
     { name: 'searchTerm', value: delaySearch },
     { name: 'category', value: category },
     { name: 'isPremium', value: isPremium },
+    { name: 'sort', value: sort },
     { name: 'page', value: page },
     { name: 'limit', value: 3 },
     { name: 'isPublish', value: true },
   ]);
+
+  console.log(sort);
 
   const [posts, setPosts] = useState<IPost[]>([]);
 
@@ -201,21 +207,7 @@ export default function Home() {
       setHasMore(data.data.result.length > 0);
     }
     setIsFetchingMore(false);
-  }, [data, searchTerm, category, isPremium]);
-
-  const sortedPosts = React.useMemo(() => {
-    const sorted = [...posts];
-
-    if (sortOption === 'rank') {
-      sorted.sort((a, b) => {
-        const rankA = a.upvotes.length - a.downvotes.length;
-        const rankB = b.upvotes.length - b.downvotes.length;
-        return rankB - rankA;
-      });
-    }
-
-    return sorted;
-  }, [posts, sortOption]);
+  }, [data, searchTerm, category, isPremium, sort]);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -239,14 +231,13 @@ export default function Home() {
 
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, category, isPremium]);
+  }, [searchTerm, category, isPremium, sort]);
 
-  const handlePopularPost = () => {
-    if (sortOption === 'rank') {
-      setSortOption('');
-    } else {
-      setSortOption('rank');
+  const handleSort = () => {
+    if (sort === '-upvotes') {
+      setSort('createdAt');
     }
+    setSort('-upvotes');
   };
 
   return (
@@ -257,9 +248,9 @@ export default function Home() {
         </div>
       ) : (
         <div className='w-[65%] pr-10 pt-10'>
-          {sortedPosts?.map((post, index) => (
+          {posts?.map((post, index) => (
             <div
-              key={post._id}
+              key={index}
               ref={index === posts.length - 1 ? lastPostRef : null} // Attach ref to the last post
             >
               <Post post={post} />
@@ -267,7 +258,7 @@ export default function Home() {
           ))}
 
           {/* {isLoading && <PostLoadingSkeletonLeft />} */}
-          {isLoading && <div>Loading more posts...</div>}
+          {/* {isLoading && <div>Loading more posts...</div>} */}
         </div>
       )}
 
@@ -300,9 +291,9 @@ export default function Home() {
         />
 
         <button
-          onClick={handlePopularPost}
+          onClick={handleSort}
           className={`w-full text-sm duration-200 border ${
-            sortOption === 'rank' ? 'bg-primary text-white' : ''
+            sort === '-upvotes' ? 'bg-primary text-white' : ''
           } border-textSecondary rounded-md pl-4 py-3 text-left`}
         >
           Popular posts

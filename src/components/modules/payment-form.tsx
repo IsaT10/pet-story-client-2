@@ -8,6 +8,7 @@ import { logout } from '@/services/auth';
 import { useRouter } from 'next/navigation';
 import { useSavePayment } from '@/hooks/payment.hook';
 import envConfig from '@/config/envConfig';
+import { useUpdateUserStatus } from '@/hooks/user.hook';
 
 export default function PaymentForm() {
   const { user, setIsLoading } = useUser();
@@ -19,6 +20,13 @@ export default function PaymentForm() {
   currentDate.setDate(currentDate.getDate() + 30); // Add 30 days
 
   const expiredDate = currentDate.toISOString();
+
+  const { mutate: handleUserStaus, isPending } = useUpdateUserStatus(
+    user?._id!,
+    {
+      status: 'premium',
+    }
+  );
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -66,7 +74,8 @@ export default function PaymentForm() {
         toast.success('Payment denied', { id: sonnerId });
       } else if (paymentIntent.status === 'succeeded') {
         try {
-          await updateUserStatus(user!._id);
+          // await updateUserStatus(user!._id);
+          handleUserStaus();
 
           handleSavePayment(
             { expiredDate },

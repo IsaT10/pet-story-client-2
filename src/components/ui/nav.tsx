@@ -21,7 +21,7 @@ const NAV_ITEMS = [
   { href: '/', label: 'Home' },
   { href: '/about-us', label: 'About us' },
   { href: '/contact-us', label: 'Projects' },
-  { href: '/profile', label: 'Profile' },
+  { href: '/user-dashboard', label: 'User Dashboard' },
 ];
 
 export default function Nav() {
