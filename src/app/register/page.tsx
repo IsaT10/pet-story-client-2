@@ -17,18 +17,30 @@ import {
   SubmitHandler,
   useForm,
 } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export default function RegisterPage() {
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const [imagePreview, setImagePreview] = React.useState('');
-  const { mutate: handleRegisterUser, isPending } = useUserRegistration();
+  const { mutate: handleRegisterUser, isPending, data } = useUserRegistration();
   const router = useRouter();
   const { setIsLoading: userLoading } = useUser();
   const methods = useForm({
     resolver: zodResolver(registerValidationSchema),
   });
-  const { handleSubmit, reset } = methods;
-  console.log(imageFile);
+  const { handleSubmit } = methods;
+
+  React.useEffect(() => {
+    if (data && !data?.success) {
+      toast.error(data?.message);
+    } else if (data && data.success) {
+      toast.success('Registration successfull');
+      userLoading(true);
+
+      router.push('/');
+    }
+  }, [data, router, userLoading]);
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const formData = new FormData();
     const postData = {
@@ -41,15 +53,7 @@ export default function RegisterPage() {
       formData.append('image', imageFile);
     }
 
-    handleRegisterUser(formData, {
-      onSuccess: () => {
-        // Reset the form and clear images on success
-        router.push('/');
-        reset();
-        setImageFile(null);
-        setImagePreview('');
-      },
-    });
+    handleRegisterUser(formData);
     userLoading(true);
   };
 
@@ -74,10 +78,10 @@ export default function RegisterPage() {
       {isPending && <Loading />}
       <div className='flex min-h-screen py-10 overflow-y-auto flex-col items-center justify-center bg-background'>
         <h3 className='my-2 text-2xl font-bold text-primary'>Register</h3>
-        <p className='mb-4 text-textSecondary'>
+        <p className='mb-4 text-stone-500'>
           Help Lost Items Find Their Way Home
         </p>
-        <div className='w-[35%] bg-white rounded-lg shadow-md p-6'>
+        <div className='md:w-[55%] sm:w-[65%] w-[80%] lg:w-[45%] xl:w-[35%] bg-white rounded-lg shadow-md p-6'>
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className='py-3'>

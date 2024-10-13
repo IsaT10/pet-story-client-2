@@ -64,7 +64,9 @@ export default function EditProfile({ image, _id, name }: TProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className='mt-6 py-1.5 text-sm'>Edit profile</Button>
+        <button className='px-4 py-1.5  rounded-md w-full text-left hover:bg-stone-100 hover:outine-none'>
+          Edit Profile
+        </button>
       </DialogTrigger>
       <DialogContent className='w-[400px] sm:w-[525px] px-10 py-8'>
         <DialogHeader>

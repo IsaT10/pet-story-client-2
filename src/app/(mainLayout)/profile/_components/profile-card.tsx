@@ -7,6 +7,13 @@ import UserList from './user-list';
 import EditProfile from './edit-profile';
 import { PremiumUser } from '@/components/ui/icon';
 import avatar from '@/assets/images/avatar.png';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { MoreHorizontal } from 'lucide-react';
+import PasswordChange from '@/components/modules/password-change';
 
 type TProps = {
   profile: IUser;
@@ -16,13 +23,14 @@ export default function ProfileCard({ profile }: TProps) {
 
   return (
     <div className=''>
+      <h2 className='mb-8 text-2xl font-semibold'>My Profile</h2>
       <div className='relative w-max'>
         <Image
           src={image || avatar}
           alt='profile-image'
           width={88}
           height={88}
-          className='rounded-full'
+          className='rounded-full h-[88px] object-cover'
         />
         {status === 'premium' ? (
           <div className='absolute bottom-0 right-0'>
@@ -33,9 +41,22 @@ export default function ProfileCard({ profile }: TProps) {
         )}
       </div>
 
-      <div className='flex gap-20 lg:gap-[116px] items-center'>
-        <p className='mt-4 font-medium text-xl'>{name}</p>
-        <EditProfile image={image} _id={_id} name={name} />
+      <div className='flex gap-20 mt-6 md:mt-10 lg:gap-[116px] items-center'>
+        <p className=' font-medium text-xl'>{name}</p>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className='p-3 rounded-full hover:bg-stone-100'>
+              <MoreHorizontal className='h-4 w-4' />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className='bg-white  w-[180px] border border-stone-400 shadow-sm rounded-lg p-1'
+            align='center'
+          >
+            <EditProfile image={image} _id={_id} name={name} />
+            <PasswordChange />
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className='flex gap-5 mt-4'>
@@ -50,7 +71,7 @@ export default function ProfileCard({ profile }: TProps) {
         </p>
       </div>
 
-      <Tabs defaultValue='follower' className='max-w-[500px] mt-7'>
+      <Tabs defaultValue='follower' className='w-full mt-7'>
         <TabsList className='grid w-full grid-cols-2 border border-primary px-1 py-0 '>
           <TabsTrigger
             value='follower'

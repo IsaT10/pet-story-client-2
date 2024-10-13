@@ -10,8 +10,7 @@ export const useSavePayment = () => {
     mutationFn: async (data: { expiredDate: string }) =>
       await savePayemnt(data),
     onSuccess: () => {
-      toast.success('Save Payment History successfully!');
-
+      // toast.success('Save Payment History successfully!');
       //   queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {

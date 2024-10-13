@@ -20,7 +20,7 @@ const MyPosts = async () => {
 
   return (
     <>
-      <h2 className='mb-12 text-2xl font-semibold'>All Posts</h2>
+      <h2 className='mb-5 text-2xl font-semibold'>All Posts</h2>
       {res?.data?.result?.map((item: IPost) => (
         <Post key={item._id} post={item} />
       ))}

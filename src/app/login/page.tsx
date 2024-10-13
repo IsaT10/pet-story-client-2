@@ -53,10 +53,8 @@ const LoginPage = () => {
       {isPending && <Loading />}
       <div className='flex min-h-screen w-full flex-col items-center justify-center bg-background'>
         <h3 className='my-2 text-2xl font-bold text-primary'>Login</h3>
-        <p className='mb-4 text-textSecondary'>
-          Welcome Back! Let’s Get Started
-        </p>
-        <div className='w-[35%] bg-white rounded-lg shadow-md p-6'>
+        <p className='mb-4 text-stone-500'>Welcome Back! Let’s Get Started</p>
+        <div className='md:w-[55%] sm:w-[65%] w-[80%] lg:w-[45%] xl:w-[35%] bg-white rounded-lg shadow-md p-6'>
           <FormWrapper
             onSubmit={onSubmit}
             resolver={zodResolver(loginValidationSchema)}

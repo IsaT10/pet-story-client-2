@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Cross, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import avatar from '@/assets/images/avatar.png';
 import { useUser } from '@/context/user.provider';
@@ -16,6 +16,7 @@ import {
 import { Button } from './button';
 import { logout } from '@/services/auth';
 import { useGetSingleUser } from '@/hooks/user.hook';
+import { Cross, Logo } from './icon';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home' },
@@ -45,7 +46,13 @@ export default function Nav() {
   return (
     <nav className='transition-all shadow-md duration-300 fixed top-0 w-full py-4 z-50 bg-white border-b border-stone-200'>
       <div className='w-full relative px-4 md:px-8 lg:px-10 flex items-center justify-between'>
-        <h1 className='text-3xl font-semibold'>Pet</h1>
+        <Link
+          href='/'
+          className='text-2xl md:text-3xl items-center font-semibold text-primary flex gap-1'
+        >
+          <Logo />
+          PetWise
+        </Link>
 
         {/* Mobile Menu Toggle */}
 
@@ -86,11 +93,11 @@ export default function Nav() {
                   width={40}
                   height={40}
                   alt='profile-image'
-                  className='rounded-full cursor-pointer'
+                  className='rounded-full h-10 cursor-pointer'
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className='bg-stone-50 flex shadow-md flex-col divide-y divide-stone-300 w-[250px] h-max border-stone-300 border rounded-lg '
+                className='bg-stone-50 flex shadow-md flex-col divide-y divide-stone-300 w-[200px] md:w-[250px] h-max border-stone-300 border rounded-lg '
                 align='end'
               >
                 <Link
@@ -131,31 +138,35 @@ export default function Nav() {
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className='flex items-center justify-end p-4'>
+        <div className='flex items-center justify-end px-8 pt-6'>
           <button
             onClick={closeMobileMenu}
             className='text-[#6D6D75] hover:text-black'
           >
-            <Cross size={24} />
+            <Cross />
           </button>
         </div>
-        <ul className='flex flex-col items-center space-y-6 mt-8'>
+        <ul className='flex flex-col divide-y divide-stone-400 mt-8 border-b border-b-stone-400'>
           {NAV_ITEMS.map((item) => (
-            <li key={item.href}>
-              <a href={item.href} onClick={closeMobileMenu}>
+            <li key={item.href} className='text-center py-3'>
+              <Link href={item.href} onClick={closeMobileMenu}>
                 {item.label}
-              </a>
+              </Link>
             </li>
           ))}
-          <li>
-            <Link
-              href='/login'
-              className='px-6 py-3 rounded-lg text-white bg-primary font-medium text-[16px]'
-              onClick={closeMobileMenu}
-            >
-              Login
-            </Link>
-          </li>
+          {!user ? (
+            <li>
+              <Link
+                href='/login'
+                className='px-6 py-3 rounded-lg text-white bg-primary font-medium text-[16px]'
+                onClick={closeMobileMenu}
+              >
+                Login
+              </Link>
+            </li>
+          ) : (
+            ''
+          )}
         </ul>
       </div>
     </nav>

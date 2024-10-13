@@ -56,8 +56,6 @@ export default function PaymentForm() {
         }
       );
 
-      console.log({ response });
-
       const { clientSecret } = await response.json();
 
       const { error: confirmError, paymentIntent } =

@@ -42,12 +42,13 @@ export default function Home() {
   const isPremium =
     type === 'basic' ? false : type === 'premium' ? true : 'all';
 
-  const delaySearch = useDebounce(searchTerm, 500);
+  const delaySearch = useDebounce(searchTerm, 700);
 
-  const { data, isLoading } = useGetAllPosts([
+  const { data, isLoading, error } = useGetAllPosts([
     { name: 'searchTerm', value: delaySearch },
     { name: 'category', value: category },
     { name: 'isPremium', value: isPremium },
+    { name: 'isPublish', value: true },
   ]);
 
   const [sortedPosts, setSortedPosts] = React.useState<IPost[]>([]);
@@ -104,6 +105,14 @@ export default function Home() {
       setSortOption('rank'); // Set sorting to rank
     }
   };
+
+  if (error)
+    return (
+      <div className='h-[calc(100vh-150px)] flex justify-center items-center text-red-600 font-semibold text-2xl'>
+        Unable to load data. Please check your internet connection and try
+        again.
+      </div>
+    );
 
   return (
     <div className='flex items-start '>
@@ -197,6 +206,11 @@ export default function Home() {
             </Sheet>
           </div>
           <div className='pt-6'>
+            {data?.data?.result?.length === 0 && (
+              <div className='h-[70vh] flex justify-center items-center text-stone-600 font-semibold text-2xl'>
+                No posts found for your search criteria.
+              </div>
+            )}
             {sortedPosts.map((item: IPost) => (
               <Post key={item._id} post={item} />
             ))}
@@ -271,7 +285,7 @@ export default function Home() {
 //     { name: 'sort', value: sort },
 //     { name: 'page', value: page },
 //     { name: 'limit', value: 3 },
-//     { name: 'isPublish', value: true },
+// { name: 'isPublish', value: true },
 //   ]);
 
 //   const [posts, setPosts] = useState<IPost[]>([]);
@@ -320,13 +334,13 @@ export default function Home() {
 //     setSort('-upvotes');
 //   };
 
-//   if (error)
-//     return (
-//       <div className='h-[calc(100vh-150px)] flex justify-center items-center text-red-600 font-semibold text-2xl'>
-//         Unable to load data. Please check your internet connection and try
-//         again.
-//       </div>
-//     );
+// if (error)
+//   return (
+//     <div className='h-[calc(100vh-150px)] flex justify-center items-center text-red-600 font-semibold text-2xl'>
+//       Unable to load data. Please check your internet connection and try
+//       again.
+//     </div>
+//   );
 
 //   return (
 //     <div className='flex items-start'>

@@ -24,10 +24,19 @@ export default function SingleUserPosts({ id }: TProps) {
         </div>
       ) : (
         <>
-          <h2 className='mb-12 text-2xl font-semibold'>All Posts</h2>
-          {data?.data?.result?.map((item: IPost) => (
-            <Post key={item._id} post={item} />
-          ))}
+          {data?.data?.result?.length ? (
+            <>
+              <h2 className='mb-12 text-2xl font-semibold'>All Posts</h2>
+              {data?.data?.result?.map((item: IPost) => (
+                <Post key={item._id} post={item} />
+              ))}
+            </>
+          ) : (
+            <p className='text-xl md:text-2xl font-medium text-center mt-40 flex flex-col items-center justify-center text-primary '>
+              No posts from this user at the moment. Check back soon to see what
+              they share.
+            </p>
+          )}
         </>
       )}
     </div>

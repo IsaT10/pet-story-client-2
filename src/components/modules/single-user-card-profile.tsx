@@ -26,14 +26,13 @@ type TProps = {
   profile: IUser;
 };
 export default function SingleUserProfileCard({ profile }: TProps) {
+  const { image, followers, following, posts, name, _id, status } = profile;
   const { user } = useUser();
   const { data } = useGetSingleUser(user?._id || '');
 
   const { mutate: handleUnfollow, isPending: unfollowerLoading } =
     useUnfollowUser();
   const { mutate: handleFollow, isPending: followerLoading } = useFollowUser();
-
-  const { image, followers, following, posts, name, _id, status } = profile;
 
   const followedByMe = data?.data?.following?.some(
     (el: IUser) => el._id === _id
@@ -52,7 +51,7 @@ export default function SingleUserProfileCard({ profile }: TProps) {
           alt='profile-image'
           width={88}
           height={88}
-          className='rounded-full'
+          className='rounded-full object-cover h-[88px]'
         />
         {status === 'premium' ? (
           <div className='absolute bottom-0 right-0'>
@@ -125,7 +124,7 @@ export default function SingleUserProfileCard({ profile }: TProps) {
         </p>
       </div>
 
-      <Tabs defaultValue='follower' className='max-w-[400px] mt-7'>
+      <Tabs defaultValue='follower' className='w-full mt-7'>
         <TabsList className='grid w-full grid-cols-2 border border-primary px-1 py-0 '>
           <TabsTrigger
             value='follower'

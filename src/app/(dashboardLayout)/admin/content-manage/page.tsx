@@ -8,8 +8,6 @@ import { IPost } from '@/types';
 export default function ContentManage() {
   const { data, isLoading, error } = useGetAllPosts([]);
 
-  console.log(data?.data?.result);
-
   if (isLoading)
     return (
       <div className='h-screen flex flex-col items-center justify-center w-full'>

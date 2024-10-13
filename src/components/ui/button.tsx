@@ -5,12 +5,12 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center px-4 py-3 whitespace-nowrap rounded-md  font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-stone-950 duration-300 dark:focus-visible:ring-stone-300',
+  'inline-flex items-center justify-center px-4 py-2.5 whitespace-nowrap rounded-md  font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-stone-950 duration-300 dark:focus-visible:ring-stone-300',
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-white hover:bg-[#5A4FC4] font-medium duration-300', // Slate Blue default
+          'bg-primary text-white hover:scale-[102%] transform transition-all font-medium  duration-300', // Slate Blue default
 
         outline:
           'border border-primary bg-white text-primary hover:bg-slate-100 dark:border-primary dark:bg-light-taupe dark:hover:bg-slate-200 dark:text-primary',

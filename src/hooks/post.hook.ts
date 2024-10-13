@@ -101,7 +101,6 @@ export const useUpvotePost = () => {
     mutationKey: ['UPVOTE'],
     mutationFn: async (id: string) => await upvotePost(id),
     onSuccess: () => {
-      toast.success('Upvoted');
       queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {
@@ -116,7 +115,6 @@ export const useDownvotePost = () => {
     mutationKey: ['DOWNVOTE'],
     mutationFn: async (id: string) => await downvotePost(id),
     onSuccess: () => {
-      toast.success('Downvoted');
       queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {

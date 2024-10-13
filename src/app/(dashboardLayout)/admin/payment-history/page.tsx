@@ -8,8 +8,6 @@ import { IPayment } from '@/types';
 export default function PaymentHistory() {
   const { data, isLoading, error } = useGetPaymentHistory([]);
 
-  console.log(data?.data?.result);
-
   if (isLoading)
     return (
       <div className='h-screen flex flex-col items-center justify-center w-full'>

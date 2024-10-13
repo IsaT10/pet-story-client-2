@@ -41,7 +41,7 @@ export function PostLoadingSkeletonRight() {
 
 export function ProfileLoading() {
   return (
-    <div className='w-[35%] pl-10 flex flex-col gap-3 pt-10 border-l h-screen sticky top-0 right-0 border-stone-300'>
+    <div className='w-full md:w-[35%] pl-10 flex flex-col gap-3 pt-10 md:border-l h-screen md:sticky top-0 right-0 border-stone-300'>
       <Skeleton className='size-24 mb-2 rounded-full' />
       <div className='flex gap-6 '>
         <Skeleton className='h-6 w-1/2 ' />

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
+import { TPassword } from '@/hooks/auth.hook';
 import { axiosInstance } from '@/lib/axiosInstance';
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
@@ -33,11 +34,19 @@ export const registerUser = async (postData: FormData) => {
       cookies().set('accessToken', res?.data?.data?.accessToken);
     }
 
-    console.log(res);
+    return res?.data;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const changePassword = async (data: TPassword) => {
+  try {
+    const res = await axiosInstance.post('/auth/change-password', data);
 
     return res?.data;
   } catch (error: any) {
-    throw new Error(error?.message);
+    return error;
   }
 };
 

@@ -4,6 +4,7 @@ import { MenuIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
+import { Logo } from './icon';
 
 const SIDEBAR_ITEMS = [
   { href: '/admin/user-manage', label: 'User Manage' },
@@ -37,7 +38,13 @@ export default function Sidebar() {
         } lg:translate-x-0  lg:w-64 flex flex-col gap-4`}
       >
         <div>
-          <h2 className='text-3xl font-semibold pb-4'>Dashboard</h2>
+          <Link
+            href='/'
+            className='text-2xl md:text-3xl items-center font-semibold text-primary flex gap-1 mb-8'
+          >
+            <Logo />
+            PetWise
+          </Link>
           <ul className='flex flex-col gap-3 pt-3'>
             {SIDEBAR_ITEMS.map((item) => (
               <Link

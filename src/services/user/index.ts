@@ -31,8 +31,6 @@ export const getUserProfile = async () => {
       next: { tags: ['userProfile'] },
     });
 
-    console.log(res);
-
     if (!res.ok) {
       throw new Error(
         `Failed to fetch posts: ${res.statusText} (Status: ${res.status})`
@@ -43,7 +41,6 @@ export const getUserProfile = async () => {
 
     return data;
   } catch (error: any) {
-    console.log(error);
     throw new Error(error.message);
   }
 };
@@ -55,7 +52,6 @@ export const unfollowUser = async (id: string) => {
     revalidateTag('userProfile');
     return data;
   } catch (error: any) {
-    console.log(error);
     throw new Error(error.message);
   }
 };
@@ -66,7 +62,6 @@ export const followUser = async (id: string) => {
     revalidateTag('userProfile');
     return data;
   } catch (error: any) {
-    console.log(error);
     throw new Error(error.message);
   }
 };

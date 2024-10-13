@@ -14,6 +14,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Spinner } from '@/components/ui/icon';
+import Link from 'next/link';
 
 type TProps = { user: IUser; isFollowing?: boolean };
 
@@ -35,7 +36,9 @@ export default function UserList({ user, isFollowing = false }: TProps) {
         className='rounded-full'
       />
       <div className='flex gap-6 w-full justify-between items-start'>
-        <p className='font-medium '>{name}</p>
+        <Link href={`/profile/${_id}`} className='font-medium hover:underline'>
+          {name}
+        </Link>
 
         <AlertDialog>
           <AlertDialogTrigger asChild>

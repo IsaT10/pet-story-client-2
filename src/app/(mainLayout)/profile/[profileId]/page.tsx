@@ -19,8 +19,8 @@ export default function UserProfile({ params }: UserProfileProps) {
 
   if (isLoading)
     return (
-      <div className='flex items-start'>
-        <div className=' w-[65%] pr-10  pt-10 '>
+      <div className='flex md:flex-row flex-col-reverse items-start'>
+        <div className='w-full md:w-[65%] pr-10  pt-10 '>
           <PostLoadingSkeletonLeft />
         </div>
         <ProfileLoading />
@@ -37,11 +37,11 @@ export default function UserProfile({ params }: UserProfileProps) {
 
   return (
     <div className='flex flex-col-reverse md:flex-row flex-start'>
-      <div className='md:w-[65%] pt-10 md:pt-20 pb-10 md:pr-6 lg:pr-10'>
+      <div className='md:w-[65%] pt-10  pb-10 md:pr-6 lg:pr-10'>
         <SingleUserPosts id={data?.data?._id} />
       </div>
 
-      <div className='md:w-[35%] pt-10 md:pt-20  md:pl-6 lg:pl-10 min-h-screen border-l md:sticky top-0  right-0 border-stone-200'>
+      <div className='md:w-[35%] pt-10   md:pl-6 lg:pl-10 min-h-screen border-l md:sticky top-0  right-0 border-stone-200'>
         <div className='sticky top-0'>
           <SingleUserProfileCard profile={data?.data} />
         </div>

@@ -45,7 +45,6 @@ import SingleComment from './comment';
 // import { RotatingLines } from 'react-loader-spinner';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Dialog, DialogContent } from '../ui/dialog';
 import WarningMessage from '../ui/warning-message';
 
 type TProps = {
@@ -190,14 +189,14 @@ export default function Post({ post }: TProps) {
   return (
     <div className=' w-full py-6 border-b border-stone-400'>
       <div className='flex justify-between items-start'>
-        <div className='flex items-start gap-2 mb-6'>
+        <div className='flex items-start gap-3 mb-6'>
           <div className='relative'>
             <Image
               src={author?.image || avatar}
-              width={44}
-              height={44}
+              width={50}
+              height={50}
               alt='author-image'
-              className='rounded-full'
+              className='rounded-full h-[50px] object-cover'
             />
             {author.status === 'premium' ? (
               <div className='absolute -right-0.5 -bottom-0.5'>
@@ -208,7 +207,9 @@ export default function Post({ post }: TProps) {
             )}
           </div>
           <div>
-            <p className='font-semibold text-lg leading-none'>{author.name}</p>
+            <p className='font-semibold md:text-lg leading-none'>
+              {author.name}
+            </p>
             <div className=' flex gap-1.5 items-center'>
               <p className='text-xs font-medium text-white mt-1 bg-primary rounded-full py-[2px] px-3'>
                 {category}
@@ -370,7 +371,9 @@ export default function Post({ post }: TProps) {
               <button onClick={() => handleVote('upvote')}>
                 <UpArrow />
               </button>
-              {upvoteCount - downvoteCount}
+              <span className='font-semibold text-black'>
+                {upvoteCount - downvoteCount}
+              </span>
               <button onClick={() => handleVote('downvote')}>
                 <DownArrow />
               </button>

@@ -8,8 +8,6 @@ import { IUser } from '@/types';
 export default function UserManage() {
   const { data, isLoading, error } = useGetAllUsers([]);
 
-  console.log(data?.data?.result);
-
   if (isLoading)
     return (
       <div className='h-screen flex flex-col items-center justify-center w-full'>
