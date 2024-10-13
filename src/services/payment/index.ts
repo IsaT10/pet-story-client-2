@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
-import envConfig from '@/config/envConfig';
 import { axiosInstance } from '@/lib/axiosInstance';
 import { TQueryParam } from '@/types';
 import { revalidateTag } from 'next/cache';
-import { cookies } from 'next/headers';
 
 export const savePayemnt = async (data: { expiredDate: string }) => {
   try {

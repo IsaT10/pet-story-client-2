@@ -45,6 +45,8 @@ import SingleComment from './comment';
 // import { RotatingLines } from 'react-loader-spinner';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { toast } from 'sonner';
+import { Dialog, DialogContent } from '../ui/dialog';
 
 type TProps = {
   post: IPost;
@@ -58,12 +60,14 @@ export default function Post({ post }: TProps) {
     content,
     comments,
     isPremium,
+    category,
     downvotes,
     createdAt,
     upvotes,
     _id,
   } = post;
   const { user, isLoading } = useUser();
+  const [isOpen, setIsOpen] = React.useState(false);
   const [showComment, setShowComment] = useState(false);
   const [showFullContent, setShowFullContent] = React.useState(false);
   const [userVote, setUserVote] = React.useState<'upvote' | 'downvote' | null>(
@@ -92,40 +96,44 @@ export default function Post({ post }: TProps) {
   }, [upvotes, downvotes, user, isLoading]);
 
   const handleVote = (type: 'upvote' | 'downvote') => {
-    if (type === 'upvote') {
-      if (userVote === 'upvote') {
-        setUpvoteCount(upvoteCount - 1);
-        setUserVote(null);
+    if (user) {
+      if (type === 'upvote') {
+        if (userVote === 'upvote') {
+          setUpvoteCount(upvoteCount - 1);
+          setUserVote(null);
+        } else {
+          setUpvoteCount(upvoteCount + 1);
+          if (userVote === 'downvote') setDownvoteCount(downvoteCount - 1);
+          setUserVote('upvote');
+        }
+        handleUpvotesPost(_id, {
+          onError: () => {
+            setUpvoteCount(
+              userVote === 'upvote' ? upvoteCount + 1 : upvoteCount - 1
+            );
+            setUserVote(userVote === 'upvote' ? null : 'upvote');
+          },
+        });
       } else {
-        setUpvoteCount(upvoteCount + 1);
-        if (userVote === 'downvote') setDownvoteCount(downvoteCount - 1);
-        setUserVote('upvote');
+        if (userVote === 'downvote') {
+          setDownvoteCount(downvoteCount - 1);
+          setUserVote(null);
+        } else {
+          setDownvoteCount(downvoteCount + 1);
+          if (userVote === 'upvote') setUpvoteCount(upvoteCount - 1);
+          setUserVote('downvote');
+        }
+        handleDownvotesPost(_id, {
+          onError: () => {
+            setDownvoteCount(
+              userVote === 'downvote' ? downvoteCount + 1 : downvoteCount - 1
+            );
+            setUserVote(userVote === 'downvote' ? null : 'downvote');
+          },
+        });
       }
-      handleUpvotesPost(_id, {
-        onError: () => {
-          setUpvoteCount(
-            userVote === 'upvote' ? upvoteCount + 1 : upvoteCount - 1
-          );
-          setUserVote(userVote === 'upvote' ? null : 'upvote');
-        },
-      });
     } else {
-      if (userVote === 'downvote') {
-        setDownvoteCount(downvoteCount - 1);
-        setUserVote(null);
-      } else {
-        setDownvoteCount(downvoteCount + 1);
-        if (userVote === 'upvote') setUpvoteCount(upvoteCount - 1);
-        setUserVote('downvote');
-      }
-      handleDownvotesPost(_id, {
-        onError: () => {
-          setDownvoteCount(
-            userVote === 'downvote' ? downvoteCount + 1 : downvoteCount - 1
-          );
-          setUserVote(userVote === 'downvote' ? null : 'downvote');
-        },
-      });
+      setIsOpen(true);
     }
   };
 
@@ -161,7 +169,7 @@ export default function Post({ post }: TProps) {
   const previewContent =
     content?.length > 300 ? content.substring(0, 500) + '...' : content;
   return (
-    <div className='mb-14 md:mb-20 w-full'>
+    <div className=' w-full py-6 border-b border-stone-400'>
       <div className='flex justify-between items-start'>
         <div className='flex items-start gap-2 mb-6'>
           <div className='relative'>
@@ -182,9 +190,15 @@ export default function Post({ post }: TProps) {
           </div>
           <div>
             <p className='font-semibold text-lg leading-none'>{author.name}</p>
-            <p className='text-xs font-medium text-stone-500 mt-1'>
-              {timeCompact(createdAt)}
-            </p>
+            <div className=' flex gap-1.5 items-center'>
+              <p className='text-xs font-medium text-white mt-1 bg-primary rounded-full py-[2px] px-3'>
+                {category}
+              </p>
+              <span className='font-bold -mt-2 text-xl'>.</span>
+              <p className='text-xs font-medium text-stone-500 mt-1'>
+                {timeCompact(createdAt)}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -305,7 +319,29 @@ export default function Post({ post }: TProps) {
             ''
           )}
 
-          <div className='flex gap-6 border-stone-300 items-center border-b pt-3 pb-4'>
+          <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+            <DialogContent className='max-w-md py-12 px-5 h-[240px] flex flex-col items-center gap-10'>
+              <p className='text-center text-lg font-medium'>
+                You need to be logged in to write a post. Please login or signup
+                to continue.
+              </p>
+
+              <div className='flex gap-4'>
+                <Link href='/register' className='w-max'>
+                  <Button variant='outline' className='py-2 px-6'>
+                    Signup
+                  </Button>
+                </Link>
+                <Link href='/login' className='w-max'>
+                  <Button className='py-2 px-6 border border-primary'>
+                    Login
+                  </Button>
+                </Link>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          <div className='flex gap-6  items-center pt-3 '>
             <div
               className={`flex gap-2 ${
                 userVote === 'upvote'
@@ -337,7 +373,7 @@ export default function Post({ post }: TProps) {
 
           {showComment ? (
             <>
-              <div className='flex w-full items-start my-4'>
+              <div className='flex w-full items-start mb-4 mt-10'>
                 <Image
                   src={user?.image || avatar}
                   height={35}

@@ -21,7 +21,6 @@ const NAV_ITEMS = [
   { href: '/', label: 'Home' },
   { href: '/about-us', label: 'About us' },
   { href: '/contact-us', label: 'Contact Us' },
-  { href: '/user-dashboard', label: 'User Dashboard' },
 ];
 
 export default function Nav() {
@@ -30,7 +29,7 @@ export default function Nav() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data } = useGetSingleUser(user?._id!);
+  const { data } = useGetSingleUser(user?._id || '');
 
   // Memoized logout handler
   const handleLogout = () => {
@@ -93,12 +92,12 @@ export default function Nav() {
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className='bg-stone-100 w-[150px] space-y-1 border shadow-sm rounded-lg p-1'
+                className='bg-stone-50 flex shadow-md flex-col divide-y divide-stone-300 w-[250px] h-max border-stone-300 border rounded-lg '
                 align='end'
               >
                 <Link
                   href='/profile'
-                  className='block w-full text-left py-1 rounded-sm hover:bg-primary pl-4 hover:text-white'
+                  className='block w-full font-medium text-left py-3  hover:bg-primary pl-4 hover:text-white'
                 >
                   Profile
                 </Link>
@@ -108,13 +107,13 @@ export default function Nav() {
                       ? '/admin/user-manage'
                       : 'user-dashboard'
                   }
-                  className='block w-full text-left py-1 rounded-sm hover:bg-primary pl-4 hover:text-white'
+                  className='block w-full text-left py-3 font-medium hover:bg-primary pl-4 hover:text-white'
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className='w-full text-left pl-4 text-red-600 font-medium hover:bg-red-700 hover:text-white py-1 rounded-md'
+                  className='w-full text-left pl-4 font-medium text-red-600 font-medium hover:bg-red-700 hover:text-white py-3 '
                 >
                   Logout
                 </button>

@@ -51,8 +51,7 @@ export const loginUser = async (userData: FieldValues) => {
     }
     return data;
   } catch (error: any) {
-    console.log(error);
-    throw new Error(error.message);
+    return error;
   }
 };
 

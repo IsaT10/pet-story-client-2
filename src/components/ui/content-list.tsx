@@ -1,6 +1,5 @@
 import { IPost } from '@/types';
 import { Button } from './button';
-import { updatePostStatus } from '@/services/post';
 import { useUpdatePostStatus } from '@/hooks/post.hook';
 import { Spinner } from './icon';
 

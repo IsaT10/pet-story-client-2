@@ -46,8 +46,7 @@ const ForgetPassword = () => {
     <>
       {isPending && <Loading />}
       <div className='flex min-h-screen w-full flex-col items-center justify-center'>
-        <h3 className='my-2 text-2xl font-bold'>FoundX</h3>
-        <p className='mb-4'>Please provide your email</p>
+        <p className='mb-3 text-lg font-medium'>Please provide your email</p>
         <div className='w-[35%]'>
           <FormWrapper
             onSubmit={onSubmit}

@@ -20,12 +20,9 @@ export default function PaymentForm() {
 
   const expiredDate = currentDate.toISOString();
 
-  const { mutate: handleUserStaus, isPending } = useUpdateUserStatus(
-    user?._id!,
-    {
-      status: 'premium',
-    }
-  );
+  const { mutate: handleUserStaus } = useUpdateUserStatus(user?._id || '', {
+    status: 'premium',
+  });
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

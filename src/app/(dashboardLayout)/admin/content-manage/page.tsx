@@ -2,9 +2,8 @@
 
 import ContentList from '@/components/ui/content-list';
 import { Spinner } from '@/components/ui/icon';
-import UserList from '@/components/ui/user-list';
 import { useGetAllPosts } from '@/hooks/post.hook';
-import { IPost, IUser } from '@/types';
+import { IPost } from '@/types';
 
 export default function ContentManage() {
   const { data, isLoading, error } = useGetAllPosts([]);

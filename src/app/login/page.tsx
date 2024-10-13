@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
@@ -12,6 +12,8 @@ import { loginValidationSchema } from '@/schema/login.schema';
 import FormInput from '@/components/form/FormInput';
 import FormWrapper from '@/components/form/FormWrapper';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { error } from 'console';
 
 const LoginPage = () => {
   const searchParams = useSearchParams();
@@ -19,28 +21,39 @@ const LoginPage = () => {
   const redirect = searchParams.get('redirect');
   const { setIsLoading: userLoading } = useUser();
 
-  const { mutate: handleLoginUser, isPending, isSuccess } = useUserLogin();
+  const { mutate: handleLoginUser, isPending, data } = useUserLogin();
+
+  useEffect(() => {
+    if (data && !data?.success) {
+      toast.error(data?.message);
+    } else if (data && data.success) {
+      toast.success('User login successful.');
+      userLoading(true);
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push('/');
+      }
+    }
+  }, [data]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     handleLoginUser(data);
-    userLoading(true);
   };
 
-  if (!isPending && isSuccess) {
-    if (redirect) {
-      router.push(redirect);
-    } else {
-      router.push('/');
-    }
-  }
+  // if (!isPending && isSuccess) {
+  //   if (redirect) {
+  //     router.push(redirect);
+  //   } else {
+  //     router.push('/');
+  //   }
+  // }
 
   return (
     <>
       {isPending && <Loading />}
       <div className='flex min-h-screen w-full flex-col items-center justify-center bg-background'>
-        <h3 className='my-2 text-2xl font-bold text-primary'>
-          Login with FoundX
-        </h3>
+        <h3 className='my-2 text-2xl font-bold text-primary'>Login</h3>
         <p className='mb-4 text-textSecondary'>
           Welcome Back! Let’s Get Started
         </p>

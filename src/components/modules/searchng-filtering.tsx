@@ -7,8 +7,6 @@ type TProps = {
   setType: (type: string) => void;
   category: string;
   setCategory: (category: string) => void;
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
 };
 
 export default function SearchingFiltering({
@@ -16,19 +14,9 @@ export default function SearchingFiltering({
   setType,
   category,
   setCategory,
-  searchTerm,
-  setSearchTerm,
 }: TProps) {
   return (
     <div className='space-y-4'>
-      <input
-        type='text'
-        name='search'
-        placeholder='Search...'
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className='border px-4 py-3 placeholder:text-textPrimary text-sm rounded-md outline-primary border-textSecondary w-full'
-      />
       <FormSelect
         allOption={true}
         label='Post Category'

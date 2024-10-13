@@ -5,7 +5,7 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { z } from 'zod';
-import React from 'react';
+import React, { Suspense } from 'react';
 import FormWrapper from '@/components/form/FormWrapper';
 import FormInput from '@/components/form/FormInput';
 import { Button } from '@/components/ui/button';
@@ -44,8 +44,7 @@ const ResetPassword = () => {
     <>
       {isPending && <Loading />}
       <div className='flex min-h-screen w-full flex-col items-center justify-center'>
-        <h3 className='my-2 text-2xl font-bold'>FoundX</h3>
-        <p className='mb-4'>Please provide your gmail</p>
+        <p className='mb-4'></p>
         <div className='w-[35%]'>
           <FormWrapper
             onSubmit={onSubmit}
@@ -65,4 +64,12 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+const WrappedResetPassword = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ResetPassword />
+    </Suspense>
+  );
+};
+
+export default WrappedResetPassword;

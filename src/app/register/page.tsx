@@ -73,9 +73,7 @@ export default function RegisterPage() {
     <>
       {isPending && <Loading />}
       <div className='flex min-h-screen py-10 overflow-y-auto flex-col items-center justify-center bg-background'>
-        <h3 className='my-2 text-2xl font-bold text-primary'>
-          Register with FoundX
-        </h3>
+        <h3 className='my-2 text-2xl font-bold text-primary'>Register</h3>
         <p className='mb-4 text-textSecondary'>
           Help Lost Items Find Their Way Home
         </p>

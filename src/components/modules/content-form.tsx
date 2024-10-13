@@ -162,17 +162,17 @@ const ContentForm = ({
 
   return (
     <div className='my-6'>
-      <div className='flex gap-6 mb-6'>
+      <div className='flex sm:flex-row flex-col gap-6 my-6'>
         <Select
           onValueChange={(value) => setPostCategory(value)}
           value={postCategory} // Set value to the selected state
         >
-          <SelectTrigger className='w-[180px]'>
+          <SelectTrigger className='sm:w-[180px]'>
             <SelectValue placeholder='Select category' />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel className='font-medium text-sm py-1.5 pl-8'>
+              <SelectLabel className='font-medium text-sm md:py-1.5 pl-8'>
                 Select category
               </SelectLabel>
               <SelectItem value='Tips'>Tips</SelectItem>
@@ -182,12 +182,12 @@ const ContentForm = ({
         </Select>
 
         <Select onValueChange={handleContentTypeChange} value={contentType}>
-          <SelectTrigger className='w-[180px]'>
+          <SelectTrigger className='sm:w-[180px]'>
             <SelectValue placeholder='Content type' />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel className='font-medium text-sm py-1.5 pl-8'>
+              <SelectLabel className='font-medium text-sm md:py-1.5 pl-8'>
                 Content type
               </SelectLabel>
               <SelectItem value='basic'>Basic</SelectItem>
@@ -214,7 +214,7 @@ const ContentForm = ({
           ) : (
             <div className='py-32'>
               <svg
-                className='text-primary w-24 mx-auto '
+                className='text-primary w-16 sm:w-24 mx-auto '
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
@@ -227,7 +227,7 @@ const ContentForm = ({
                   d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
                 />
               </svg>
-              <p className='text-center text-primary tracking-tight text-3xl text-blue'>
+              <p className='text-center text-primary tracking-tight text-xl sm:text-3xl text-blue'>
                 Choose a Thumbnail
               </p>
             </div>
@@ -260,7 +260,7 @@ const ContentForm = ({
         modules={modules}
         onChange={(value) => setValue(value)}
       />
-      <Button onClick={handler} className={` text-sm mt-16 w-24 h-10`}>
+      <Button onClick={handler} className={` text-sm mt-20 md:mt-16 w-24 h-10`}>
         {createPending || updatePending ? (
           <Spinner className='animate-spin h-4' />
         ) : (

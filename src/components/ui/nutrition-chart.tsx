@@ -34,11 +34,8 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
   };
 
   return (
-    <div>
-      <div
-        ref={chartRef}
-        className=' flex flex-col items-center justify-center w-full'
-      >
+    <div className='flex flex-col items-center justify-center '>
+      <div ref={chartRef} className=' w-full'>
         <h2 className='text-xl font-bold text-center mb-10'>
           {nutritionData.petType.toUpperCase()} Nutrition Chart
         </h2>
@@ -98,10 +95,10 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
         <p className='mt-6 text-center'>
           <strong>Additional Tips:</strong> {nutritionData.tips}
         </p>
-        <Button onClick={generatePdf} className='mt-10 '>
-          Download PDF
-        </Button>
       </div>
+      <Button onClick={generatePdf} className='mt-10 '>
+        Download PDF
+      </Button>
     </div>
   );
 };
