@@ -4,6 +4,7 @@ import {
   getSingleUser,
   unfollowUser,
   updateUser,
+  updateUserRole,
   updateUserStatus,
 } from '@/services/user';
 import { TQueryParam } from '@/types';
@@ -95,6 +96,23 @@ export const useUpdateUserStatus = (
     onSuccess: () => {
       toast.success('User status updated successfully.');
       queryClient.invalidateQueries({ queryKey: ['ALL_PAYMENTS'] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+export const useUpdateUserRole = (
+  userId: string,
+  payload: { role: string }
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['UPDATE_USER_STATUS', userId],
+    mutationFn: () => updateUserRole(userId, payload),
+    onSuccess: () => {
+      toast.success('User role updated successfully.');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_USERS'] });
     },
     onError: (error) => {
       toast.error(error.message);

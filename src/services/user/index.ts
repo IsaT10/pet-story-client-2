@@ -109,6 +109,7 @@ export const updateUser = async (updateData: FormData, id: string) => {
     throw new Error(error?.message);
   }
 };
+
 export const updateUserStatus = async (
   id: string,
   payload: { status: string }
@@ -120,7 +121,16 @@ export const updateUserStatus = async (
     );
     revalidateTag('userProfile');
 
-    console.log(res.data);
+    return res?.data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
+};
+export const updateUserRole = async (id: string, payload: { role: string }) => {
+  try {
+    const res = await axiosInstance.patch(`/users/change-role/${id}`, payload);
+    revalidateTag('userProfile');
+
     return res?.data;
   } catch (error: any) {
     throw new Error(error?.message);

@@ -30,7 +30,7 @@ export function CreateContentModal() {
           <span className='group-hover:text-primary'>Write</span>
         </button>
       </DialogTrigger>
-      <DialogContent className='max-w-[70%] max-h-[90vh] overflow-y-auto '>
+      <DialogContent className='md:max-w-[80%] rounded-md max-w-[90%]  max-h-[90vh] overflow-y-auto '>
         <DialogHeader>
           <DialogTitle>Create Post</DialogTitle>
         </DialogHeader>

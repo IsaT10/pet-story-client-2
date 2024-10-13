@@ -44,9 +44,9 @@ import { EditContentModal } from './edit-modal';
 import SingleComment from './comment';
 // import { RotatingLines } from 'react-loader-spinner';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { toast } from 'sonner';
+import { usePathname, useRouter } from 'next/navigation';
 import { Dialog, DialogContent } from '../ui/dialog';
+import WarningMessage from '../ui/warning-message';
 
 type TProps = {
   post: IPost;
@@ -68,6 +68,8 @@ export default function Post({ post }: TProps) {
   } = post;
   const { user, isLoading } = useUser();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpenVote, setIsOpenVote] = React.useState(false);
+  const [isOpenComment, setIsOpenComment] = React.useState(false);
   const [showComment, setShowComment] = useState(false);
   const [showFullContent, setShowFullContent] = React.useState(false);
   const [userVote, setUserVote] = React.useState<'upvote' | 'downvote' | null>(
@@ -77,6 +79,7 @@ export default function Post({ post }: TProps) {
   const [upvoteCount, setUpvoteCount] = React.useState(upvotes?.length);
   const [downvoteCount, setDownvoteCount] = React.useState(downvotes?.length);
   const pathname = usePathname(); // Use usePathname to get the current path
+  const route = useRouter();
 
   const { mutate: handleUpvotesPost } = useUpvotePost();
   const { mutate: handleDownvotesPost } = useDownvotePost();
@@ -133,7 +136,7 @@ export default function Post({ post }: TProps) {
         });
       }
     } else {
-      setIsOpen(true);
+      setIsOpenVote(true);
     }
   };
 
@@ -168,6 +171,22 @@ export default function Post({ post }: TProps) {
   };
   const previewContent =
     content?.length > 300 ? content.substring(0, 500) + '...' : content;
+
+  const handleSeePremiumPOst = () => {
+    if (!user) {
+      setIsOpen(true);
+    } else {
+      route.push('/subscription');
+    }
+  };
+
+  const handleShowComment = () => {
+    if (user) {
+      setShowComment(!showComment);
+    } else {
+      setIsOpenComment(true);
+    }
+  };
   return (
     <div className=' w-full py-6 border-b border-stone-400'>
       <div className='flex justify-between items-start'>
@@ -319,27 +338,24 @@ export default function Post({ post }: TProps) {
             ''
           )}
 
-          <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-            <DialogContent className='max-w-md py-12 px-5 h-[240px] flex flex-col items-center gap-10'>
-              <p className='text-center text-lg font-medium'>
-                You need to be logged in to write a post. Please login or signup
-                to continue.
-              </p>
+          <WarningMessage
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+            message='You need to be logged in and premium to see any premium post. Please login or signup '
+          />
 
-              <div className='flex gap-4'>
-                <Link href='/register' className='w-max'>
-                  <Button variant='outline' className='py-2 px-6'>
-                    Signup
-                  </Button>
-                </Link>
-                <Link href='/login' className='w-max'>
-                  <Button className='py-2 px-6 border border-primary'>
-                    Login
-                  </Button>
-                </Link>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <WarningMessage
+            setIsOpen={setIsOpenVote}
+            isOpen={isOpenVote}
+            message='You need to be logged in to react a post. Please login or signup
+                to continue.'
+          />
+          <WarningMessage
+            setIsOpen={setIsOpenComment}
+            isOpen={isOpenComment}
+            message='You need to be logged in to see comments. Please login or signup
+                to continue.'
+          />
 
           <div className='flex gap-6  items-center pt-3 '>
             <div
@@ -361,7 +377,7 @@ export default function Post({ post }: TProps) {
             </div>
 
             <button
-              onClick={() => setShowComment(!showComment)}
+              onClick={handleShowComment}
               className='flex items-center gap-2 border border-stone-400 rounded-full w-max px-5 py-1.5'
             >
               <span className='mt-1'>
@@ -419,9 +435,9 @@ export default function Post({ post }: TProps) {
         {(isPremium && user?.status !== 'premium') || (isPremium && !user) ? (
           <div className='absolute flex flex-col gap-3 items-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform'>
             <Eyeslash />
-            <Link href={'/subscription'}>
-              <Button className='py-2'>Want to see premium content?</Button>
-            </Link>
+            <Button onClick={handleSeePremiumPOst} className='py-2'>
+              Want to see premium content?
+            </Button>
           </div>
         ) : (
           ''

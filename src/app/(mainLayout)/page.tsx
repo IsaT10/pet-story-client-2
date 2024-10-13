@@ -25,10 +25,7 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
@@ -42,12 +39,10 @@ export default function Home() {
   const [type, setType] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(false);
   const [sortOption, setSortOption] = React.useState('');
-  // const [sortLoading, setSortLoading] = React.useState(false);
   const isPremium =
     type === 'basic' ? false : type === 'premium' ? true : 'all';
 
-  // Debounce searchTerm and sortOption to add a delay
-  const delaySearch = useDebounce(searchTerm, 400);
+  const delaySearch = useDebounce(searchTerm, 500);
 
   const { data, isLoading } = useGetAllPosts([
     { name: 'searchTerm', value: delaySearch },
@@ -61,7 +56,12 @@ export default function Home() {
     if (data?.data?.result) {
       const posts = [...data.data.result];
 
-      if (sortOption === 'rank') {
+      if (
+        sortOption === 'rank' ||
+        searchTerm.length > 0 ||
+        (type !== 'all' && type.length) ||
+        (category !== 'all' && category.length)
+      ) {
         posts.sort((a, b) => {
           const rankA = a.upvotes.length - a.downvotes.length;
           const rankB = b.upvotes.length - b.downvotes.length;
@@ -71,7 +71,7 @@ export default function Home() {
 
       setSortedPosts(posts);
     }
-  }, [data, sortOption]);
+  }, [data, sortOption, searchTerm, category, type]);
 
   // // Apply sorting logic with the debounced sortOption
   // React.useEffect(() => {
@@ -108,7 +108,7 @@ export default function Home() {
   return (
     <div className='flex items-start '>
       {isLoading ? (
-        <div className=' w-[65%] pr-10  pt-10 '>
+        <div className='w-full md:w-[65%] pr-10  pt-10 '>
           <PostLoadingSkeletonLeft />
         </div>
       ) : (
@@ -161,7 +161,7 @@ export default function Home() {
                 placeholder='Search...'
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className='border pl-10 py-[11px] placeholder:text-textPrimary text-sm rounded-md outline-primary border-textSecondary w-full'
+                className='border pl-10 py-[11px] placeholder:text-textPrimary text-sm rounded-md outline-primary bg-stone-100 border-stone-300 w-full'
               />
 
               <div className='absolute top-3 left-3'>
@@ -274,8 +274,6 @@ export default function Home() {
 //     { name: 'isPublish', value: true },
 //   ]);
 
-//   console.log({ error });
-
 //   const [posts, setPosts] = useState<IPost[]>([]);
 
 //   useEffect(() => {
@@ -313,7 +311,7 @@ export default function Home() {
 
 //   useEffect(() => {
 //     setPage(1);
-//   }, [searchTerm, category, isPremium, sort]);
+//   }, [searchTerm, category, isPremium]);
 
 //   const handleSort = () => {
 //     if (sort === '-upvotes') {
@@ -372,25 +370,25 @@ export default function Home() {
 //               <ContentForm setIsOpen={setIsOpen} />
 //             </DialogContent>
 //           ) : (
-// <DialogContent className='max-w-md py-12 px-5 h-[240px] flex flex-col items-center gap-10'>
-//   <p className='text-center text-lg font-medium'>
-//     You need to be logged in to write a post. Please log in or sign
-//     up to continue.
-//   </p>
+//             <DialogContent className='max-w-md py-12 px-5 h-[240px] flex flex-col items-center gap-10'>
+//               <p className='text-center text-lg font-medium'>
+//                 You need to be logged in to write a post. Please log in or sign
+//                 up to continue.
+//               </p>
 
-//   <div className='flex gap-4'>
-//     <Link href='/register' className='w-max'>
-//       <Button variant='outline' className='py-2 px-6'>
-//         Signup
-//       </Button>
-//     </Link>
-//     <Link href='/login' className='w-max'>
-//       <Button className='py-2 px-6 border border-primary'>
-//         Login
-//       </Button>
-//     </Link>
-//   </div>
-// </DialogContent>
+//               <div className='flex gap-4'>
+//                 <Link href='/register' className='w-max'>
+//                   <Button variant='outline' className='py-2 px-6'>
+//                     Signup
+//                   </Button>
+//                 </Link>
+//                 <Link href='/login' className='w-max'>
+//                   <Button className='py-2 px-6 border border-primary'>
+//                     Login
+//                   </Button>
+//                 </Link>
+//               </div>
+//             </DialogContent>
 //           )}
 //         </Dialog>
 //         <SearchingFiltering
@@ -398,8 +396,6 @@ export default function Home() {
 //           setType={setType}
 //           category={category}
 //           setCategory={setCategory}
-//           searchTerm={searchTerm}
-//           setSearchTerm={setSearchTerm}
 //         />
 
 //         <button

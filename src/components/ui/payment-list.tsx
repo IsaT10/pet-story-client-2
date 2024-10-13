@@ -7,11 +7,13 @@ import { useUpdateUserStatus } from '@/hooks/user.hook';
 type TProps = { payment: IPayment };
 
 export default function PaymentList({ payment }: TProps) {
+  const updateData = {
+    status: payment?.user?.status === 'basic' ? 'premium' : 'basic',
+  };
+
   const { mutate: handleUserStaus, isPending } = useUpdateUserStatus(
     payment?.user?._id,
-    {
-      status: 'basic',
-    }
+    updateData
   );
 
   return (
@@ -39,20 +41,16 @@ export default function PaymentList({ payment }: TProps) {
       </span> */}
 
       <span className='flex-1 text-center'>
-        {payment?.user?.status === 'premium' ? (
-          <Button
-            onClick={() => handleUserStaus()}
-            className='h-9 w-40 whitespace-nowrap'
-          >
-            {isPending ? (
-              <Spinner className='animate-spin h-4' />
-            ) : (
-              <>Change Status</>
-            )}
-          </Button>
-        ) : (
-          ''
-        )}
+        <Button
+          onClick={() => handleUserStaus()}
+          className='h-9 w-40 whitespace-nowrap'
+        >
+          {isPending ? (
+            <Spinner className='animate-spin h-4' />
+          ) : (
+            <>Change Status</>
+          )}
+        </Button>
       </span>
     </div>
   );

@@ -13,7 +13,6 @@ import FormInput from '@/components/form/FormInput';
 import FormWrapper from '@/components/form/FormWrapper';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { error } from 'console';
 
 const LoginPage = () => {
   const searchParams = useSearchParams();
@@ -35,7 +34,7 @@ const LoginPage = () => {
         router.push('/');
       }
     }
-  }, [data]);
+  }, [data, redirect, router, userLoading]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     handleLoginUser(data);

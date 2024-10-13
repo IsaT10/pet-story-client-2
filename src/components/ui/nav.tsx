@@ -34,9 +34,7 @@ export default function Nav() {
   // Memoized logout handler
   const handleLogout = () => {
     logout();
-    // if (protectedRoutes.some((route) => pathname.match(route))) {
     router.push('/');
-    // }
     setIsLoading(true);
   };
 
@@ -113,7 +111,7 @@ export default function Nav() {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className='w-full text-left pl-4 font-medium text-red-600 font-medium hover:bg-red-700 hover:text-white py-3 '
+                  className='w-full text-left pl-4  text-red-600 font-medium hover:bg-red-700 hover:text-white py-3 '
                 >
                   Logout
                 </button>
