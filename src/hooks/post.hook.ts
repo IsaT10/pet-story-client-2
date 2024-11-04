@@ -6,12 +6,14 @@ import {
   downvotePost,
   getAllPost,
   getPostBySingleUser,
+  sharePost,
   updatePost,
   updatePostStatus,
+  updateSharePost,
   upvotePost,
 } from '../services/post';
 import { toast } from 'sonner';
-import { TQueryParam } from '@/types';
+import { ISharePostVariables, TQueryParam } from '@/types';
 
 export const useGetAllPosts = (query: TQueryParam[]) => {
   return useQuery({
@@ -51,8 +53,8 @@ export const useDeletePost = (postId: string) => {
     mutationKey: ['DELETE_POSTS', postId],
     mutationFn: () => deletePost(postId),
     onSuccess: () => {
-      toast.success('Post deleted successfully.');
       queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
+      toast.success('Post deleted successfully.');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -101,6 +103,37 @@ export const useUpvotePost = () => {
     mutationKey: ['UPVOTE'],
     mutationFn: async (id: string) => await upvotePost(id),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useSharedPost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['SHARED_POST'],
+    mutationFn: async (variables: ISharePostVariables) =>
+      await sharePost(variables),
+    onSuccess: () => {
+      toast.success('Post shared successfully.');
+      queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+export const useUpdateSharedPost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['UPDATE_SHARED_POST'],
+    mutationFn: async (variables: ISharePostVariables) =>
+      await updateSharePost(variables),
+    onSuccess: () => {
+      toast.success('Post updated successfully.');
       queryClient.invalidateQueries({ queryKey: ['GET_ALL_POSTS'] });
     },
     onError: (error) => {

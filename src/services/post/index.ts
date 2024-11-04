@@ -3,7 +3,7 @@
 
 import envConfig from '@/config/envConfig';
 import { axiosInstance } from '@/lib/axiosInstance';
-import { TQueryParam } from '@/types';
+import { ISharePostVariables, TQueryParam } from '@/types';
 import { revalidateTag } from 'next/cache';
 import { getUserProfile } from '../auth';
 
@@ -89,6 +89,40 @@ export const createPost = async (postData: FormData) => {
     throw new Error(error?.message);
   }
 };
+
+export const sharePost = async ({
+  postId,
+  sharedData,
+}: ISharePostVariables) => {
+  try {
+    const res = await axiosInstance.post(`/posts/share/${postId}`, sharedData);
+
+    revalidateTag('posts');
+
+    return res?.data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
+};
+
+export const updateSharePost = async ({
+  postId,
+  sharedData,
+}: ISharePostVariables) => {
+  try {
+    const res = await axiosInstance.patch(
+      `/posts/share/update-post/${postId}`,
+      sharedData
+    );
+
+    revalidateTag('posts');
+
+    return res?.data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
+};
+
 export const updatePost = async (postData: FormData, postId: string) => {
   try {
     const res = await axiosInstance.patch(

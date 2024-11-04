@@ -18,11 +18,7 @@ import { logout } from '@/services/auth';
 import { useGetSingleUser } from '@/hooks/user.hook';
 import { Cross, Logo } from './icon';
 
-const NAV_ITEMS = [
-  { href: '/', label: 'Home' },
-  { href: '/about-us', label: 'About us' },
-  { href: '/contact-us', label: 'Contact Us' },
-];
+const NAV_ITEMS = [{ href: '/', label: 'Home' }];
 
 export default function Nav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

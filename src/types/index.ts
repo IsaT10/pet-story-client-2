@@ -17,6 +17,10 @@ export interface IPost {
   author: IUser;
   createdAt: string;
   updatedAt: string;
+  sharedPostId?: IPost;
+  sharedBy?: string;
+  shareCount: number;
+  sharedText?: string;
 }
 
 export interface IComment {
@@ -74,4 +78,13 @@ export interface IPayment {
   expiredDate: string;
   createdAt: string;
   updatedAt: string;
+}
+
+interface SharedData {
+  sharedText: string;
+}
+
+export interface ISharePostVariables {
+  postId: string;
+  sharedData: SharedData;
 }
