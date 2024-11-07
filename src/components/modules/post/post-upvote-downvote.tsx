@@ -1,6 +1,6 @@
 import { useUser } from '@/context/user.provider';
 import React from 'react';
-import { DownArrow, UpArrow } from '../ui/icon';
+import { DownArrow, UpArrow } from '@/components/ui/icon';
 import { useDownvotePost, useUpvotePost } from '@/hooks/post.hook';
 
 type Tprops = {

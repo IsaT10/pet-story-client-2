@@ -8,28 +8,19 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import React, { useState } from 'react';
-import { PremiumUser, Share, Spinner } from '../ui/icon';
+import { PremiumUser, Share, Spinner } from '../../ui/icon';
 import { useUser } from '@/context/user.provider';
 import Image from 'next/image';
 import avatar from '@/assets/images/avatar.png';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { useSharedPost } from '@/hooks/post.hook';
 
 type TProps = {
   _id: string;
   shareCount: number;
-  setIsOpenShare: React.Dispatch<React.SetStateAction<boolean>>;
-  isOpenShare: boolean;
 };
 
-export function ShareModal({
-  _id,
-  shareCount,
-  setIsOpenShare,
-  isOpenShare,
-  showShareModal,
-  setShowShareModal,
-}: TProps) {
+export function ShareModal({ _id, shareCount }: TProps) {
   const [sharedText, setSharedText] = useState('');
   const { user } = useUser();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -45,27 +36,16 @@ export function ShareModal({
       },
       {
         onSuccess: () => {
-          setIsOpenShare(false);
+          setIsOpen(false);
         },
       }
     );
   };
 
-  const handleShowShareModal = () => {
-    if (user) {
-      setShowShareModal(!showShareModal);
-    } else {
-      setIsOpenShare(true);
-    }
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>
-        <button
-          onClick={handleShowShareModal}
-          className='flex items-center gap-2 border border-stone-400 rounded-full w-20 justify-center  h-10'
-        >
+        <button className='flex items-center gap-2 border border-stone-400 rounded-full w-20 justify-center  h-10'>
           <span>
             <Share />
           </span>

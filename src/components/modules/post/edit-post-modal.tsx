@@ -11,7 +11,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 // import ContentForm from './content-form';
 import { IPost } from '@/types';
-const ContentForm = dynamic(() => import('./content-form'), {
+const ContentForm = dynamic(() => import('../content-form'), {
   ssr: false,
 });
 

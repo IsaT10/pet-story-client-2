@@ -2,7 +2,7 @@ import { Skeleton } from './skeleton';
 
 export function PostLoadingSkeletonLeft() {
   return (
-    <div className='flex items-start'>
+    <div className=' flex items-start '>
       <div className=' w-full '>
         <div className='flex gap-3'>
           <Skeleton className='size-12  rounded-full mb' />

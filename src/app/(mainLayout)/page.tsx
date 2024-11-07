@@ -6,7 +6,7 @@ const ContentForm = dynamic(() => import('@/components/modules/content-form'), {
   ssr: false,
 });
 // import ContentForm from '@/components/modules/content-form';
-import Post from '@/components/modules/Post';
+import Post from '@/components/modules/post/Post';
 import SearchingFiltering from '@/components/modules/searchng-filtering';
 import {
   Dialog,
@@ -31,6 +31,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/context/user.provider';
 import Link from 'next/link';
+import { useFocusContext } from '@/context/focus.provider';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -52,7 +53,7 @@ export default function Home() {
   ]);
 
   const [sortedPosts, setSortedPosts] = React.useState<IPost[]>([]);
-
+  const { searchInputRef } = useFocusContext();
   React.useEffect(() => {
     if (data?.data?.result) {
       const posts = [...data.data.result];
@@ -115,56 +116,17 @@ export default function Home() {
     );
 
   return (
-    <div className='flex items-start '>
+    <div className='flex items-start flex-1'>
       {isLoading ? (
-        <div className='w-full md:w-[65%] pr-10  pt-10 '>
+        <div className='w-full  px-24  pt-10 '>
           <PostLoadingSkeletonLeft />
         </div>
       ) : (
-        <div className='md:w-[65%] md:pr-6 lg:pr-10  pt-10 '>
+        <div className='md:w-full md:px-6 xl:px-10 2xl:px-20  pt-10'>
           <div className='grid grid-cols-[1fr_30px] sm:flex  gap-5 items-start pb-7 sm:pb-4 border-b-2 border-textSecondary'>
-            <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-              <DialogTrigger asChild>
-                <button className='flex group items-center w-full  pb-3 relative'>
-                  <span className='absolute left-4 top-2'>
-                    <Pencil color={'#6A5ACD'} />
-                  </span>
-                  <span className='w-full bg-stone-100 border border-stone-300 duration-200  rounded-md pl-14 py-2.5 text-left'>
-                    Create Post
-                  </span>
-                </button>
-              </DialogTrigger>
-              {user ? (
-                <DialogContent className='md:max-w-[80%] rounded-md max-w-[90%] max-h-[90vh] overflow-y-auto '>
-                  <DialogHeader>
-                    <DialogTitle>Create Post</DialogTitle>
-                  </DialogHeader>
-                  <ContentForm setIsOpen={setIsOpen} />
-                </DialogContent>
-              ) : (
-                <DialogContent className='max-w-md py-12 px-5 h-[240px] flex flex-col items-center gap-10'>
-                  <p className='text-center text-lg font-medium'>
-                    You need to be logged in to write a post. Please login or
-                    signup to continue.
-                  </p>
-
-                  <div className='flex gap-4'>
-                    <Link href='/register' className='w-max'>
-                      <Button variant='outline' className='py-2 px-6'>
-                        Signup
-                      </Button>
-                    </Link>
-                    <Link href='/login' className='w-max'>
-                      <Button className='py-2 px-6 border border-primary'>
-                        Login
-                      </Button>
-                    </Link>
-                  </div>
-                </DialogContent>
-              )}
-            </Dialog>
             <div className='relative w-full col-span-2 order-last '>
               <input
+                ref={searchInputRef}
                 type='text'
                 name='search'
                 placeholder='Search...'
@@ -218,7 +180,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className=' md:w-[35%] md:pl-6 lg:pl-10 hidden md:flex flex-col gap-4 pt-10 border-l h-screen sticky top-0 right-0 border-stone-300'>
+      <div className='md:w-[200px] lg:w-[400px] xl:w-[500px] lg:pl-6 xl:pl-10 hidden lg:flex flex-col gap-4 pt-10 border-l h-screen sticky top-0 right-0 border-stone-300'>
         <SearchingFiltering
           type={type}
           setType={setType}

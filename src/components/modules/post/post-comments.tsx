@@ -4,7 +4,7 @@ import { IComment } from '@/types';
 import Image from 'next/image';
 import avatar from '@/assets/images/avatar.png';
 import React from 'react';
-import { Send, Spinner } from '../ui/icon';
+import { Send, Spinner } from '@/components/ui/icon';
 import SingleComment from './comment';
 type Tprops = {
   _id: string;

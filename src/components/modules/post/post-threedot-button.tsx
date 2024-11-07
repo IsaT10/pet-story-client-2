@@ -15,10 +15,10 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { MoreHorizontal } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { IPost } from '@/types';
 import { useDeletePost } from '@/hooks/post.hook';
-import { EditContentModal } from './edit-modal';
+import { EditContentModal } from './edit-post-modal';
 import { EditSharedPostModal } from './edit-shared-post-modal';
 
 type Tprops = { post: IPost };

@@ -1,7 +1,7 @@
 import { IPost } from '@/types';
-import Post from '@/components/modules/Post';
+import Post from '@/components/modules/post/Post';
 import { getPostByUser } from '@/services/post';
-import { CreateContentModal } from '@/components/modules/create-model';
+import { CreateContentModal } from '@/components/modules/post/create-post-modal';
 
 const MyPosts = async () => {
   const res = await getPostByUser();
@@ -20,7 +20,6 @@ const MyPosts = async () => {
 
   return (
     <>
-      <h2 className='mb-5 text-2xl font-semibold'>All Posts</h2>
       {res?.data?.result?.map((item: IPost) => (
         <Post key={item._id} post={item} />
       ))}

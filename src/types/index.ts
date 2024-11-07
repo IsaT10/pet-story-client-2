@@ -88,3 +88,10 @@ export interface ISharePostVariables {
   postId: string;
   sharedData: SharedData;
 }
+
+export interface INotification {
+  user: string;
+  fromUser: string;
+  type: string;
+  isRead: boolean;
+}

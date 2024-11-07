@@ -1,11 +1,17 @@
+import MenuSidebar from '@/components/ui/menu-sidebar';
 import Nav from '@/components/ui/nav';
+import { FocusProvider } from '@/context/focus.provider';
 import { ReactNode } from 'react';
 
 export default function MainLayot({ children }: { children: ReactNode }) {
   return (
     <div className='  text-textPrimary'>
-      <Nav />
-      <div className='max-w-5xl px-5 lg:mx-auto pt-[72px]'>{children}</div>
+      {/* <Nav /> */}
+
+      <div className='relative max-w-[1900px] mx-5 md:mr-7   flex '>
+        <MenuSidebar />
+        {children}
+      </div>
     </div>
   );
 }

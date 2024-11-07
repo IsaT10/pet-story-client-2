@@ -11,7 +11,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { useUser } from '@/context/user.provider';
 import { useDeleteComment, useUpdateComment } from '@/hooks/comment.hook';
 import React from 'react';
-import { Send, Spinner } from '../ui/icon';
+import { Send, Spinner } from '../../ui/icon';
 // import { RotatingLines } from 'react-loader-spinner';
 
 export default function SingleComment({

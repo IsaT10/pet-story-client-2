@@ -3,7 +3,13 @@
 import { IPost } from '@/types';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { Comment, Eyeslash, PremiumPost, PremiumUser } from '../ui/icon';
+import {
+  Comment,
+  Eyeslash,
+  PremiumPost,
+  PremiumUser,
+  Share,
+} from '@/components/ui/icon';
 import { useUser } from '@/context/user.provider';
 
 import avatar from '@/assets/images/avatar.png';
@@ -14,15 +20,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 // import { RotatingLines } from 'react-loader-spinner';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import WarningMessage from '../ui/warning-message';
+import WarningMessage from '@/components/ui/warning-message';
 import PostThreedotButton from './post-threedot-button';
 import PostUpvoteDownvote from './post-upvote-downvote';
 import PostComments from './post-comments';
-import { ShareModal } from './share-modal';
+import { ShareModal } from './share-post-modal';
 
 type TProps = {
   post: IPost;
@@ -46,19 +52,15 @@ export default function Post({ post }: TProps) {
     _id,
   } = post;
   const { user } = useUser();
-  console.log(sharedText || 'ass');
   const [isOpen, setIsOpen] = React.useState(false);
   const [isOpenVote, setIsOpenVote] = React.useState(false);
   const [isOpenComment, setIsOpenComment] = React.useState(false);
   const [isOpenShare, setIsOpenShare] = React.useState(false);
   const [showComment, setShowComment] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
   const [showFullContent, setShowFullContent] = React.useState(false);
 
   const pathname = usePathname(); // Use usePathname to get the current path
   const route = useRouter();
-
-  console.log(sharedBy);
 
   const previewContent =
     content?.length > 300 ? content.substring(0, 500) + '...' : content;
@@ -78,9 +80,10 @@ export default function Post({ post }: TProps) {
       setIsOpenComment(true);
     }
   };
+
   return (
     <>
-      <div className='w-full py-6 border-b border-stone-400'>
+      <div className='max-w-[800px] mx-auto py-6 border-b border-stone-400'>
         <div className='flex justify-between items-start'>
           <div className='flex items-start gap-3 mb-6'>
             <div className='relative'>
@@ -182,7 +185,7 @@ export default function Post({ post }: TProps) {
                   height={100}
                   width={800}
                   alt='post-thumbnail'
-                  className='mt-3  max-h-[320px] rounded-t-lg object-cover'
+                  className='mt-3  max-h-[320px]  rounded-t-lg object-cover'
                 />
               ) : (
                 ''
@@ -323,14 +326,23 @@ export default function Post({ post }: TProps) {
               )}
             </button>
 
-            <ShareModal
-              _id={_id}
-              isOpenShare={isOpenShare}
-              shareCount={shareCount}
-              setIsOpenShare={setIsOpenShare}
-              showShareModal={showShareModal}
-              setShowShareModal={setShowShareModal}
-            />
+            {user ? (
+              <ShareModal _id={_id} shareCount={shareCount} />
+            ) : (
+              <button
+                onClick={() => setIsOpenShare(true)}
+                className='flex items-center gap-2 border border-stone-400 rounded-full w-20 justify-center  h-10'
+              >
+                <span>
+                  <Share />
+                </span>
+                {shareCount ? (
+                  <span className='leading-none font-medium'>{shareCount}</span>
+                ) : (
+                  ''
+                )}
+              </button>
+            )}
           </div>
 
           {showComment ? <PostComments _id={_id} comments={comments} /> : ''}

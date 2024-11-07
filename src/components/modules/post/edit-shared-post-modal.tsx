@@ -10,8 +10,8 @@ import {
 import avatar from '@/assets/images/avatar.png';
 import React from 'react';
 import { IPost } from '@/types';
-import { PremiumUser, Spinner } from '../ui/icon';
-import { Button } from '../ui/button';
+import { PremiumUser, Spinner } from '@/components/ui/icon';
+import { Button } from '@/components/ui/button';
 import { useUpdateSharedPost } from '@/hooks/post.hook';
 import Image from 'next/image';
 import { timeCompact } from '@/app/utils/timeCompact';

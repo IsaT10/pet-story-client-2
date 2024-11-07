@@ -7,7 +7,7 @@ import { Menu } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import avatar from '@/assets/images/avatar.png';
 import { useUser } from '@/context/user.provider';
-import { CreateContentModal } from '../modules/create-model';
+import { CreateContentModal } from '../modules/post/create-post-modal';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +16,9 @@ import {
 import { Button } from './button';
 import { logout } from '@/services/auth';
 import { useGetSingleUser } from '@/hooks/user.hook';
-import { Cross, Logo } from './icon';
+import { Cross, Logo, Notification } from './icon';
+import { useGetNotificationByUser } from '@/hooks/notifications.hook';
+import { INotification } from '@/types';
 
 const NAV_ITEMS = [{ href: '/', label: 'Home' }];
 
@@ -25,8 +27,13 @@ export default function Nav() {
   const { user, setIsLoading } = useUser();
   const router = useRouter();
   const pathname = usePathname();
+  const { data: notification } = useGetNotificationByUser();
 
   const { data } = useGetSingleUser(user?._id || '');
+  const unreadNotification = notification?.data?.filter(
+    (el: INotification) => el.isRead === false
+  );
+  console.log(unreadNotification?.length);
 
   // Memoized logout handler
   const handleLogout = () => {
@@ -41,7 +48,7 @@ export default function Nav() {
 
   return (
     <nav className='transition-all shadow-md duration-300 fixed top-0 w-full py-4 z-50 bg-white border-b border-stone-200'>
-      <div className='w-full relative px-4 md:px-8 lg:px-10 flex items-center justify-between'>
+      <div className='max-w-7xl md:mx-7 mx-5 xl:mx-auto relative  flex items-center justify-between'>
         <Link
           href='/'
           className='text-2xl md:text-3xl items-center font-semibold text-primary flex gap-1'
@@ -79,9 +86,16 @@ export default function Nav() {
             >
               <Menu />
             </button>
+
             <div className='hidden md:block'>
-              <CreateContentModal />
+              {/* <CreateContentModal /> */}
             </div>
+
+            <button>
+              <Notification />
+            </button>
+
+            <p>{unreadNotification?.length}</p>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Image
