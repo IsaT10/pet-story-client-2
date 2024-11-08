@@ -47,7 +47,6 @@ export default function Post({ post }: TProps) {
     upvotes,
     sharedText,
     sharedPostId,
-    sharedBy,
     shareCount,
     _id,
   } = post;

@@ -26,8 +26,52 @@ body {
   font-size: 1.875rem; /* Equivalent to text-3xl */
 }
 
+@media (max-width: 768px) {
+  .custom-html h1 {
+    font-size: 1.7rem;
+  }
+
+  .custom-html h2 {
+    font-size: 1.5rem;
+    line-height: 30px;
+  }
+}
+@media (max-width: 500px) {
+  .custom-html h1 {
+    font-size: 1.5rem;
+  }
+
+  .custom-html h2 {
+    font-size: 1.25rem;
+    line-height: 30px;
+  }
+}
+
 @layer base {
   img {
     display: initial;
   }
+}
+
+/* Scrollbar width */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+/* Track (background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar color */
+  border-radius: 10px;
+  border: 3px solid #f1f1f1; /* Gives a "padding" effect */
+}
+
+/* Hover effect on the handle */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
 }

@@ -1,7 +1,7 @@
 import { useGetPostBySingleUser } from '@/hooks/post.hook';
-import Post from './Post';
 import { IPost } from '@/types';
 import { PostLoadingSkeletonLeft } from '../ui/post-loading-skeleton';
+import Post from './post/Post';
 
 type TProps = { id: string };
 

@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Notifications from '../modules/notifications/notifications';
 import {
   useGetNotificationByUser,
@@ -31,7 +31,7 @@ import { logout } from '@/services/auth';
 import Image from 'next/image';
 import { useGetSingleUser } from '@/hooks/user.hook';
 import { useFocusContext } from '@/context/focus.provider';
-import WarningMessage from './warning-message';
+import { LayoutDashboard } from 'lucide-react';
 
 const NAV_LINK_ITEMS = [
   {
@@ -45,7 +45,7 @@ const NAV_LINK_ITEMS = [
 
 export default function MenuSidebar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [hasUnread, setHasUnread] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [activeButton, setActiveButton] = useState<string | null>(null);
   const { data: notification } = useGetNotificationByUser();
@@ -58,24 +58,31 @@ export default function MenuSidebar() {
     (el: INotification) => el.isRead === false
   );
   const { mutate: readNotifications } = useReadNotifications();
-  console.log(unreadNotification?.length);
+
+  useEffect(() => {
+    if (notification?.data) {
+      const unreadNotifications = notification.data.some(
+        (el: INotification) => !el.isRead
+      );
+      setHasUnread(unreadNotifications);
+    }
+  }, [notification]);
 
   function handleNotificationClick() {
-    setActiveButton(
-      activeButton === 'notifications' ? 'notifications' : 'notifications'
-    );
-
     setShowNotifications(!showNotifications);
+    setActiveButton(activeButton === 'notifications' ? null : 'notifications');
 
+    // Immediately hide the red dot
+    setHasUnread(false);
+
+    // Call API in the background
     readNotifications();
   }
 
   function handleSearchClick() {
-    setActiveButton(activeButton === 'search' ? 'search' : 'search');
+    setShowNotifications(false);
+    setActiveButton('search');
     focusSearchInput();
-  }
-  function handleCreatePostClick() {
-    setActiveButton(activeButton === 'create' ? 'create' : 'create');
   }
 
   function isLinkActive(href: string) {
@@ -88,7 +95,7 @@ export default function MenuSidebar() {
 
   const handleLogout = () => {
     logout();
-    router.push('/');
+    router.push('/login');
     setIsLoading(true);
   };
 
@@ -99,7 +106,10 @@ export default function MenuSidebar() {
           <Link
             href='/'
             className='text-2xl ml-3 items-center font-semibold text-primary flex gap-1'
-            onClick={() => setActiveButton(null)} // Clear active button on link click
+            onClick={() => {
+              setActiveButton(null);
+              setShowNotifications(false);
+            }}
           >
             <Logo />
             PetWise
@@ -109,7 +119,10 @@ export default function MenuSidebar() {
               <div key={item.label}>
                 <Link
                   href={item.href}
-                  onClick={() => setActiveButton(null)}
+                  onClick={() => {
+                    setActiveButton(null);
+                    setShowNotifications(false);
+                  }}
                   className={`group flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 py-3 px-3 ${
                     isLinkActive(item.href) ? 'text-primary font-semibold' : ''
                   }`}
@@ -131,21 +144,19 @@ export default function MenuSidebar() {
             <button
               onClick={handleNotificationClick}
               className={`group w-full flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 py-3 px-3 ${
-                isButtonActive('notifications')
-                  ? 'text-primary font-semibold '
+                activeButton === 'notifications'
+                  ? 'text-primary font-semibold'
                   : ''
               }`}
             >
               <span className='relative transition-transform duration-200 group-hover:scale-105'>
-                {isButtonActive('notifications') ? (
+                {activeButton === 'notifications' ? (
                   <NotificationSolid />
                 ) : (
                   <Notification />
                 )}
-                {unreadNotification?.length > 0 ? (
+                {hasUnread && (
                   <span className='bg-red-600 p-1 rounded-full absolute right-0 top-0'></span>
-                ) : (
-                  ''
                 )}
               </span>
               <span>Notifications</span>
@@ -164,14 +175,23 @@ export default function MenuSidebar() {
             </button>
 
             <CreateContentModal
-              handleCreatePostClick={handleCreatePostClick}
-              isButtonActive={isButtonActive}
+              setShowNotifications={setShowNotifications}
+              setActiveButton={setActiveButton}
+              isNav={true}
             />
 
-            <Notifications showNotifications={showNotifications} />
+            <Notifications
+              showNotifications={showNotifications}
+              notification={notification}
+              setShowNotifications={setShowNotifications}
+              setActiveButton={setActiveButton}
+            />
             <Link
               href='/profile'
-              onClick={() => setActiveButton(null)}
+              onClick={() => {
+                setActiveButton(null);
+                setShowNotifications(false);
+              }}
               className={`group flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 py-3 px-3 ${
                 isLinkActive('/profile') ? 'text-primary font-semibold' : ''
               }`}
@@ -186,13 +206,22 @@ export default function MenuSidebar() {
               <span>Profile</span>
             </Link>
 
+            {user?.role === 'admin' ? (
+              <Link
+                href='/admin/user-manage'
+                className={`group w-full flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 py-3 px-3 `}
+              >
+                <span className='relative transition-transform duration-200 group-hover:scale-105'>
+                  <LayoutDashboard />
+                </span>
+                <span>Dashboard</span>
+              </Link>
+            ) : (
+              ''
+            )}
             <button
               onClick={handleLogout}
-              className={`group w-full flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 py-3 px-3 ${
-                isButtonActive('notifications')
-                  ? 'text-primary font-semibold '
-                  : ''
-              }`}
+              className={`group w-full flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 py-3 px-3 `}
             >
               <span className='relative transition-transform duration-200 group-hover:scale-105'>
                 <Logout />
@@ -203,19 +232,16 @@ export default function MenuSidebar() {
         </div>
       </div>
 
-      <WarningMessage
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-        message='You need to be logged in and premium to see any premium post. Please login or signup '
-      />
-
-      <div className='md:hidden block bg-white border-t border-stone-300 h-20 min-w-full top-[90%] fixed -bottom-10 left-0 right-0 z-50'>
+      <div className='md:hidden block bg-white border-t border-stone-300 py-2 min-w-full fixed bottom-0 left-0 right-0 z-50'>
         <div className='flex items-center justify-around w-full'>
           {NAV_LINK_ITEMS.map((item) => (
             <div key={item.label} className=''>
               <Link
                 href={item.href}
-                onClick={() => setActiveButton(null)}
+                onClick={() => {
+                  setActiveButton(null);
+                  setShowNotifications(false);
+                }}
                 className={`group flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 ${
                   isLinkActive(item.href) ? 'text-primary font-semibold' : ''
                 }`}
@@ -232,6 +258,22 @@ export default function MenuSidebar() {
               </Link>
             </div>
           ))}
+
+          <button
+            onClick={handleSearchClick}
+            className={`group  flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100  ${
+              isButtonActive('search') ? 'text-primary font-semibold ' : ''
+            }`}
+          >
+            <span className='transition-transform duration-200 group-hover:scale-105'>
+              <Search />
+            </span>
+          </button>
+
+          <CreateContentModal
+            setShowNotifications={setShowNotifications}
+            setActiveButton={setActiveButton}
+          />
 
           <button
             onClick={handleNotificationClick}
@@ -255,9 +297,11 @@ export default function MenuSidebar() {
             </span>
           </button>
 
-          <CreateContentModal
-            handleCreatePostClick={handleCreatePostClick}
-            isButtonActive={isButtonActive}
+          <Notifications
+            showNotifications={showNotifications}
+            notification={notification}
+            setShowNotifications={setShowNotifications}
+            setActiveButton={setActiveButton}
           />
 
           <DropdownMenu>
@@ -276,20 +320,25 @@ export default function MenuSidebar() {
             >
               <Link
                 href='/profile'
+                onClick={() => {
+                  setShowNotifications(false);
+                  setActiveButton(null);
+                }}
                 className='block w-full font-medium text-left py-3  hover:bg-primary pl-4 hover:text-white'
               >
                 Profile
               </Link>
-              <Link
-                href={
-                  user?.role === 'admin'
-                    ? '/admin/user-manage'
-                    : 'user-dashboard'
-                }
-                className='block w-full text-left py-3 font-medium hover:bg-primary pl-4 hover:text-white'
-              >
-                Dashboard
-              </Link>
+              {user?.role === 'admin' ? (
+                <Link
+                  href={'/admin/user-manage'}
+                  className='block w-full text-left py-3 font-medium hover:bg-primary pl-4 hover:text-white'
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                ''
+              )}
+
               <button
                 onClick={handleLogout}
                 className='w-full text-left pl-4  text-red-600 font-medium hover:bg-red-700 hover:text-white py-3 '

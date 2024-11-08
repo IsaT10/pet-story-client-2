@@ -7,7 +7,6 @@ import { Menu } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import avatar from '@/assets/images/avatar.png';
 import { useUser } from '@/context/user.provider';
-import { CreateContentModal } from '../modules/post/create-post-modal';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -103,7 +102,7 @@ export default function Nav() {
                   width={40}
                   height={40}
                   alt='profile-image'
-                  className='rounded-full h-10 cursor-pointer'
+                  className='rounded-full h-10 object-cover cursor-pointer'
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent

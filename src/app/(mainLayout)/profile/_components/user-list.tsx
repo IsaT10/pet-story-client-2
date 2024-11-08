@@ -30,7 +30,7 @@ export default function UserList({ user, isFollowing = false }: TProps) {
     <div className='flex gap-3 items-center py-3'>
       <Image
         src={image}
-        alt='follower-image'
+        alt='user-image'
         width={50}
         height={50}
         className='rounded-full'

@@ -39,10 +39,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(new URL('/', request.url));
+  return NextResponse.next();
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/profile/:page*', '/admin/:page*', '/login', '/register'],
+  matcher: ['/profile/:page*', '/admin/:page*', '/login', '/register', '/'],
 };

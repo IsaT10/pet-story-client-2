@@ -7,14 +7,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React from 'react';
-import { Add2, Add2Solid, Pencil } from '../../ui/icon';
+import React, { SetStateAction } from 'react';
+import { Add2 } from '../../ui/icon';
 import dynamic from 'next/dynamic';
 const ContentForm = dynamic(() => import('../content-form'), {
   ssr: false,
 });
 
-export function CreateContentModal({ handleCreatePostClick, isButtonActive }) {
+type TProps = {
+  isNav?: boolean;
+  setShowNotifications?: React.Dispatch<SetStateAction<boolean>>;
+  setActiveButton?: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+export function CreateContentModal({
+  isNav,
+  setShowNotifications,
+  setActiveButton,
+}: TProps) {
   // const [isHovered, setIsHovered] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -22,13 +32,18 @@ export function CreateContentModal({ handleCreatePostClick, isButtonActive }) {
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>
         <button
-          onClick={handleCreatePostClick}
-          className={`group md:w-full flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 py-3 px-3 ${
-            isButtonActive('create') ? 'text-primary font-semibold ' : ''
-          }`}
+          onClick={() => {
+            if (setShowNotifications && setActiveButton) {
+              setShowNotifications(false);
+              setActiveButton(null);
+            }
+          }}
+          className={`group ${
+            isNav ? 'md:w-full' : ''
+          }  text-center flex items-center gap-3 my-2 duration-200 rounded-lg hover:bg-stone-100 md:py-3 md:px-3 `}
         >
           <span className='transition-transform duration-200 group-hover:scale-105'>
-            {isButtonActive('create') ? <Add2Solid /> : <Add2 />}
+            <Add2 />
           </span>
           <span className='md:inline-block hidden'>Create</span>
         </button>

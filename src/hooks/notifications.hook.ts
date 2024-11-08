@@ -9,7 +9,7 @@ export const useGetNotificationByUser = () => {
   return useQuery({
     queryKey: ['NOTIFICATIONS'],
     queryFn: async () => await getNotificationByUser(),
-    refetchInterval: 10000,
+    refetchInterval: 5000,
   });
 };
 

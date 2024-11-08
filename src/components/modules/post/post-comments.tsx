@@ -46,7 +46,7 @@ export default function PostComments({ _id, comments }: Tprops) {
           height={35}
           width={35}
           alt='user-profile'
-          className='rounded-full mr-2 '
+          className='rounded-full mr-2 object-cover'
         />
         <form
           onSubmit={handleCommentSubmit}

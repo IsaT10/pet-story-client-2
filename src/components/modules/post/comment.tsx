@@ -81,7 +81,7 @@ export default function SingleComment({
         width={35}
         height={35}
         alt='comment-author-image'
-        className='rounded-full'
+        className='rounded-full object-contain'
       />
 
       {isEdit ? (

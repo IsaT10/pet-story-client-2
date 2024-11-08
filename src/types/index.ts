@@ -91,7 +91,8 @@ export interface ISharePostVariables {
 
 export interface INotification {
   user: string;
-  fromUser: string;
+  fromUser: IUser;
   type: string;
   isRead: boolean;
+  createdAt: string;
 }

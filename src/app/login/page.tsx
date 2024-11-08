@@ -1,26 +1,27 @@
 'use client';
 
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FieldValues, SubmitHandler } from 'react-hook-form';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useUserLogin } from '@/hooks/auth.hook';
 import { useUser } from '@/context/user.provider';
 import Loading from '@/components/ui/loading';
 import { loginValidationSchema } from '@/schema/login.schema';
-import FormInput from '@/components/form/FormInput';
-import FormWrapper from '@/components/form/FormWrapper';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import FormWrapper from '@/components/form/FormWrapper';
+import FormInput from '@/components/form/FormInput';
 
 const LoginPage = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const redirect = searchParams.get('redirect');
   const { setIsLoading: userLoading } = useUser();
-
   const { mutate: handleLoginUser, isPending, data } = useUserLogin();
+
+  const [defaultValues, setDefaultValues] = useState({
+    email: '',
+    password: '',
+  });
 
   useEffect(() => {
     if (data && !data?.success) {
@@ -28,25 +29,28 @@ const LoginPage = () => {
     } else if (data && data.success) {
       toast.success('User login successful.');
       userLoading(true);
-      if (redirect) {
-        router.push(redirect);
-      } else {
-        router.push('/');
-      }
-    }
-  }, [data, redirect, router, userLoading]);
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    handleLoginUser(data);
+      router.push('/');
+    }
+  }, [data, router, userLoading]);
+
+  const onSubmit = (formData: { email: string; password: string }) => {
+    handleLoginUser(formData);
   };
 
-  // if (!isPending && isSuccess) {
-  //   if (redirect) {
-  //     router.push(redirect);
-  //   } else {
-  //     router.push('/');
-  //   }
-  // }
+  const handleDemoLogin = (role: 'user' | 'admin') => {
+    if (role === 'user') {
+      setDefaultValues({
+        email: 'user@gmail.com',
+        password: '123456',
+      });
+    } else {
+      setDefaultValues({
+        email: 'admin@gmail.com',
+        password: '123456',
+      });
+    }
+  };
 
   return (
     <>
@@ -58,6 +62,7 @@ const LoginPage = () => {
           <FormWrapper
             onSubmit={onSubmit}
             resolver={zodResolver(loginValidationSchema)}
+            defaultValues={defaultValues}
           >
             <div className='py-3'>
               <FormInput name='email' label='Email' type='email' />
@@ -66,21 +71,41 @@ const LoginPage = () => {
               <FormInput name='password' label='Password' type='password' />
             </div>
 
-            <Link
-              href={'/forget-password'}
-              className=' text-sm font-medium text-primary'
-            >
-              Forget Password
-            </Link>
+            <div className='flex justify-between items-center my-6'>
+              <Link
+                href='/forget-password'
+                className='text-sm font-medium text-primary'
+              >
+                Forget Password
+              </Link>
+              <div className='flex gap-2'>
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='text-sm py-1'
+                  onClick={() => handleDemoLogin('user')}
+                >
+                  Demo User
+                </Button>
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='text-sm py-1.5'
+                  onClick={() => handleDemoLogin('admin')}
+                >
+                  Demo Admin
+                </Button>
+              </div>
+            </div>
 
-            <Button className='block w-full mt-1 mb-3 ' type='submit'>
+            <Button className='block w-full mt-1 mb-3' type='submit'>
               Login
             </Button>
           </FormWrapper>
           <div className='text-center text-textSecondary'>
             Don’t have an account?{' '}
             <Link
-              href={'/register'}
+              href='/register'
               className='text-primary font-medium hover:underline'
             >
               Register
@@ -92,13 +117,4 @@ const LoginPage = () => {
   );
 };
 
-// Wrap your LoginPage component in a Suspense boundary
-const WrappedLoginPage = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <LoginPage />
-    </Suspense>
-  );
-};
-
-export default WrappedLoginPage;
+export default LoginPage;

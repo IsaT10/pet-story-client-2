@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 type TFormConfig = {
@@ -29,6 +29,14 @@ export default function FormWrapper({
   }
 
   const methods = useForm(formConfig);
+
+  const { reset } = methods;
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider {...methods}>

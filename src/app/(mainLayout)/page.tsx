@@ -1,21 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import dynamic from 'next/dynamic';
-const ContentForm = dynamic(() => import('@/components/modules/content-form'), {
-  ssr: false,
-});
 // import ContentForm from '@/components/modules/content-form';
 import Post from '@/components/modules/post/Post';
 import SearchingFiltering from '@/components/modules/searchng-filtering';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Filter, Pencil, Search } from '@/components/ui/icon';
+
+import { Filter, Search } from '@/components/ui/icon';
 import { PostLoadingSkeletonLeft } from '@/components/ui/post-loading-skeleton';
 import { useGetAllPosts } from '@/hooks/post.hook';
 import useDebounce from '@/hooks/use.debounce';
@@ -28,17 +18,17 @@ import {
   SheetFooter,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { useUser } from '@/context/user.provider';
-import Link from 'next/link';
+// import { Button } from '@/components/ui/button';
+// import { useUser } from '@/context/user.provider';
+// import Link from 'next/link';
 import { useFocusContext } from '@/context/focus.provider';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [category, setCategory] = React.useState('');
-  const { user } = useUser();
+  // const { user } = useUser();
   const [type, setType] = React.useState('');
-  const [isOpen, setIsOpen] = React.useState(false);
+  // const [isOpen, setIsOpen] = React.useState(false);
   const [sortOption, setSortOption] = React.useState('');
   const isPremium =
     type === 'basic' ? false : type === 'premium' ? true : 'all';
@@ -118,55 +108,53 @@ export default function Home() {
   return (
     <div className='flex items-start flex-1'>
       {isLoading ? (
-        <div className='w-full  px-24  pt-10 '>
+        <div className='w-full  md:px-6 xl:px-10 2xl:px-20  pt-10 '>
           <PostLoadingSkeletonLeft />
         </div>
       ) : (
-        <div className='md:w-full md:px-6 xl:px-10 2xl:px-20  pt-10'>
-          <div className='grid grid-cols-[1fr_30px] sm:flex  gap-5 items-start pb-7 sm:pb-4 border-b-2 border-textSecondary'>
-            <div className='relative w-full col-span-2 order-last '>
-              <input
-                ref={searchInputRef}
-                type='text'
-                name='search'
-                placeholder='Search...'
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className='border pl-10 py-[11px] placeholder:text-textPrimary text-sm rounded-md outline-primary bg-stone-100 border-stone-300 w-full'
+        <div className='md:w-full md:px-6 xl:px-10 2xl:px-20  md:pt-10'>
+          <div className='relative  mx-auto col-span-2 order-last '>
+            <input
+              ref={searchInputRef}
+              type='text'
+              name='search'
+              placeholder='Search...'
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className='border pl-12 py-3.5 placeholder:text-textPrimary  rounded-md outline-primary leading-none bg-stone-100 border-stone-300 w-full'
+            />
+
+            <div className='absolute top-3 left-3'>
+              <Search />
+            </div>
+          </div>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className='hidden pt-1 sm:order-last'>
+                <Filter />
+              </button>
+            </SheetTrigger>
+            <SheetContent className='pt-14'>
+              <SearchingFiltering
+                type={type}
+                setType={setType}
+                category={category}
+                setCategory={setCategory}
               />
 
-              <div className='absolute top-3 left-3'>
-                <Search />
-              </div>
-            </div>
-            <Sheet>
-              <SheetTrigger asChild>
-                <button className='md:hidden pt-1 sm:order-last'>
-                  <Filter />
-                </button>
-              </SheetTrigger>
-              <SheetContent className='pt-14'>
-                <SearchingFiltering
-                  type={type}
-                  setType={setType}
-                  category={category}
-                  setCategory={setCategory}
-                />
-
-                <button
-                  onClick={handlePopularPost}
-                  className={`w-full text-sm duration-200 border ${
-                    sortOption === 'rank' ? 'bg-primary text-white' : ''
-                  } border-textSecondary rounded-md pl-4 py-3 text-left`}
-                >
-                  Popular posts
-                </button>
-                <SheetFooter>
-                  <SheetClose asChild></SheetClose>
-                </SheetFooter>
-              </SheetContent>
-            </Sheet>
-          </div>
+              <button
+                onClick={handlePopularPost}
+                className={`w-full text-sm duration-200 border ${
+                  sortOption === 'rank' ? 'bg-primary text-white' : ''
+                } border-textSecondary rounded-md pl-4 py-3 text-left`}
+              >
+                Popular posts
+              </button>
+              <SheetFooter>
+                <SheetClose asChild></SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
           <div className='pt-6'>
             {data?.data?.result?.length === 0 && (
               <div className='h-[70vh] flex justify-center items-center text-stone-600 font-semibold text-2xl'>
