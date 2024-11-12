@@ -121,5 +121,4 @@
   npm run dev
 ```
 
-**Live Link**
-[Petwise](https://pet-story-client.vercel.app/ 'Petwise')
+
